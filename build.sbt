@@ -10,5 +10,6 @@ scalaVersion := "2.11.11"
 libraryDependencies += filters
 
 libraryDependencies ++= Seq(
-  "uk.co.panaxiom" %% "play-jongo" % "2.0.0-jongo1.3"
+  "uk.co.panaxiom" %% "play-jongo" % "2.0.0-jongo1.3",
+  "org.postgresql" % "postgresql" % "42.0.0"
 )
