@@ -1,5 +1,23 @@
-@()
+@import helper._
+@import play.api.data._
 
-@main("Welcome to Play") {
-  <h1>Welcome to Play!</h1>
-}
+@(loginForm: Form[User])
+
+    @main("Login") {
+        @form(action = routes.AppController.login){
+            @inputText(loginForm("username"),
+                '_label ->"Username",
+                '_showConstraints -> false,
+                'id -> "username",
+                'size -> 30)
+            @inputPassword(loginForm("password"),
+                '_label ->"Password",
+                '_showConstraints -> false,
+                'id -> "password",
+                'size -> 30)
+
+            <input class="btn btn-default" type="submit" value="Send">
+        }
+    }
+
+

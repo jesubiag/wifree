@@ -13,3 +13,7 @@ libraryDependencies ++= Seq(
   "uk.co.panaxiom" %% "play-jongo" % "2.0.0-jongo1.3",
   "org.postgresql" % "postgresql" % "42.0.0"
 )
+libraryDependencies ++= Seq(
+  ws
+)
+libraryDependencies += "org.webjars" % "bootstrap" % "3.0.0"
