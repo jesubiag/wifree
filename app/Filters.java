@@ -21,6 +21,6 @@ public class Filters extends DefaultHttpFilters {
     public Filters(
                    AllowedHostsFilter allowedHostsFilter,
                    SecurityHeadersFilter securityHeadersFilter) {
-        super( allowedHostsFilter, securityHeadersFilter);
+        //super( allowedHostsFilter, securityHeadersFilter);
     }
 }
