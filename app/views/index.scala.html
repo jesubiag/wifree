@@ -1,10 +1,10 @@
 @import helper._
 @import play.api.data._
 
-@(loginForm: Form[User])
+@(loginForm: Form[User],urlRouter:String)
 
     @main("Login") {
-        @form(action = routes.AppController.login){
+        @form(action = routes.AppController.login(urlRouter)){
             @inputText(loginForm("username"),
                 '_label ->"Username",
                 '_showConstraints -> false,
@@ -15,7 +15,6 @@
                 '_showConstraints -> false,
                 'id -> "password",
                 'size -> 30)
-
             <input class="btn btn-default" type="submit" value="Send">
         }
     }
