@@ -1,23 +1,22 @@
+@(loginForm: play.api.data.Form[User])
 @import helper._
-@import play.api.data._
 
-@(loginForm: Form[User])
+	@main("Login") {
+		@form(action = routes.AppController.login){
+			@inputText(loginForm("username"),
+				'_label ->"Username",
+				'_showConstraints -> false,
+				'id -> "username",
+				'size -> 30)
+			@inputPassword(loginForm("password"),
+				'_label ->"Password",
+				'_showConstraints -> false,
+				'id -> "password",
+				'size -> 30)
 
-    @main("Login") {
-        @form(action = routes.AppController.login){
-            @inputText(loginForm("username"),
-                '_label ->"Username",
-                '_showConstraints -> false,
-                'id -> "username",
-                'size -> 30)
-            @inputPassword(loginForm("password"),
-                '_label ->"Password",
-                '_showConstraints -> false,
-                'id -> "password",
-                'size -> 30)
-
-            <input class="btn btn-default" type="submit" value="Send">
-        }
-    }
+			<input class="btn btn-default" type="submit" value="Send">
+		}
+	}
 
 
+--
