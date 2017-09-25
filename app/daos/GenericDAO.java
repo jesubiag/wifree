@@ -1,7 +1,7 @@
 package daos;
 
-import com.avaje.ebean.Ebean;
-import com.avaje.ebean.EbeanServer;
+import io.ebean.Ebean;
+import io.ebean.EbeanServer;
 import play.Logger;
 
 import java.util.List;

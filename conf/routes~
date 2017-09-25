@@ -22,3 +22,8 @@ GET			/admin				controllers.LoginController.adminLoginLanding
 POST		/admin				controllers.LoginController.loginAdmin
 
 # AdminController routes
+=======
+GET         /                    controllers.AppController.index(urlRouter:String)
+POST        /login/:urlRouter    controllers.AppController.login(urlRouter)
+GET         /router              controllers.AppController.callRouter
+>>>>>>> b9f26e6e317ac5aede75f72597a2eb2e49259c31
