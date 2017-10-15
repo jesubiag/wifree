@@ -1,0 +1,8 @@
+@(profileList: java.util.List[org.pac4j.core.profile.CommonProfile])
+
+Analytics
+<br>
+@profiles() = { @profileList.toList }
+profiles: @profiles
+<br>
+<a href="/dashboard">Dashboard</a>

@@ -1,21 +1,13 @@
-@(loginForm: play.api.data.Form[User])
-@import helper._
+@(profileList: java.util.List[org.pac4j.core.profile.CommonProfile], token: String, sessionId: String)
+@profiles() = { @profileList.toList }
 
-	@main("Login") {
-		@form(action = routes.AppController.login){
-			@inputText(loginForm("username"),
-				'_label ->"Username",
-				'_showConstraints -> false,
-				'id -> "username",
-				'size -> 30)
-			@inputPassword(loginForm("password"),
-				'_label ->"Password",
-				'_showConstraints -> false,
-				'id -> "password",
-				'size -> 30)
+WiFree Landing
+<p></p>
+<a href="/admin">Ir a Admin Index</a>
+<p></p>
+<a href="/dashboard">Ir a Admin Dashboard (requiere login)</a>
 
-			<input class="btn btn-default" type="submit" value="Send">
-		}
-	}
-
---
+<br>
+profiles: @profiles
+<br>
+sessionId: @sessionId
