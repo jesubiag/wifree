@@ -1,7 +1,6 @@
 package controllers;
 
 import be.objectify.deadbolt.java.actions.SubjectPresent;
-import com.google.inject.Inject;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.ProfileManager;
@@ -10,6 +9,7 @@ import org.pac4j.play.store.PlaySessionStore;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**

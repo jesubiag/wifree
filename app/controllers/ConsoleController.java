@@ -1,12 +1,13 @@
 package controllers;
 
 import be.objectify.deadbolt.java.actions.SubjectPresent;
-import com.google.inject.Inject;
 import org.pac4j.core.config.Config;
 import org.pac4j.http.client.indirect.FormClient;
 import org.pac4j.play.store.PlaySessionStore;
 import play.mvc.Controller;
 import play.mvc.Result;
+
+import javax.inject.Inject;
 
 /**
  * Created by jesu on 08/07/17.

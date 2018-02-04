@@ -1,7 +1,6 @@
 package controllers;
 
 import be.objectify.deadbolt.java.actions.SubjectPresent;
-import com.google.inject.Inject;
 import models.JsonContent;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.client.Clients;
@@ -19,6 +18,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.twirl.api.Content;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**

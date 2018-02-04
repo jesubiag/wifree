@@ -1,4 +1,4 @@
-package views.admin
+package views.models
 
 import java.util.Date
 

@@ -1,4 +1,4 @@
-package common.constants;
+package core.constants;
 
 public interface ConnectionsConstants {
 

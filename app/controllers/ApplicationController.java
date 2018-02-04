@@ -1,6 +1,5 @@
 package controllers;
 
-import com.google.inject.Inject;
 import models.Portal;
 import models.PortalNetworkConfiguration;
 import org.pac4j.core.config.Config;
@@ -13,10 +12,9 @@ import org.pac4j.play.store.PlaySessionStore;
 import play.data.Form;
 import play.mvc.Result;
 import services.ConnectionsService;
-import views.admin.ConnectedUser;
+import views.models.ConnectedUser;
 
-import java.util.ArrayList;
-import java.util.Date;
+import javax.inject.Inject;
 import java.util.List;
 
 public class ApplicationController extends WiFreeController {

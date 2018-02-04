@@ -3,7 +3,7 @@ package services;
 import daos.PortalNetworkConfigurationDAO;
 import models.Portal;
 import models.PortalNetworkConfiguration;
-import views.admin.ConnectedUser;
+import views.models.ConnectedUser;
 
 import java.util.ArrayList;
 import java.util.Date;
