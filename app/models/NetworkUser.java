@@ -3,6 +3,7 @@ package models;
 import models.types.Gender;
 import play.data.validation.Constraints;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
@@ -24,8 +25,10 @@ public class NetworkUser extends BaseModel {
 	@NotNull
 	private String email;
 
+	@Nullable
 	private String lastUsedMACAddress;
 
+	@Nullable
 	private Instant lastConnection;
 
 	private boolean online;
@@ -47,7 +50,8 @@ public class NetworkUser extends BaseModel {
 	public NetworkUser() {}
 
 	public NetworkUser(Portal portal, String name, String email, String lastUsedMACAddress, Instant lastConnection,
-					   boolean online, String password, Gender gender, Address address, Set<NetworkUserMACAddress> macAddresses) {
+					   boolean online, String password, Gender gender, Address address, Set<NetworkUserMACAddress> macAddresses,
+					   Set<NetworkUserSocialNetworkAccount> socialNetworkAccounts) {
 		this.portal = portal;
 		this.name = name;
 		this.email = email;
@@ -58,6 +62,7 @@ public class NetworkUser extends BaseModel {
 		this.gender = gender;
 		this.address = address;
 		this.macAddresses = macAddresses;
+		this.socialNetworkAccounts = socialNetworkAccounts;
 	}
 
 
@@ -147,4 +152,11 @@ public class NetworkUser extends BaseModel {
 		this.macAddresses = macAddresses;
 	}
 
+	public Set<NetworkUserSocialNetworkAccount> getSocialNetworkAccounts() {
+		return socialNetworkAccounts;
+	}
+
+	public void setSocialNetworkAccounts(Set<NetworkUserSocialNetworkAccount> socialNetworkAccounts) {
+		this.socialNetworkAccounts = socialNetworkAccounts;
+	}
 }

@@ -1,6 +1,8 @@
 package controllers;
 
 import com.google.inject.Inject;
+import models.Portal;
+import models.PortalNetworkConfiguration;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.context.Pac4jConstants;
 import org.pac4j.core.profile.CommonProfile;
@@ -8,12 +10,16 @@ import org.pac4j.core.profile.ProfileManager;
 import org.pac4j.play.PlayWebContext;
 import org.pac4j.play.java.Secure;
 import org.pac4j.play.store.PlaySessionStore;
-import play.mvc.Controller;
+import play.data.Form;
 import play.mvc.Result;
+import services.ConnectionsService;
+import views.admin.ConnectedUser;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class ApplicationController extends Controller {
+public class ApplicationController extends WiFreeController {
 
 	@Inject
 	private Config config;
@@ -29,10 +35,19 @@ public class ApplicationController extends Controller {
 
 	@Secure(clients = "AnonymousClient", authorizers = "csrfToken")
 	public Result index() {
+		logger.debug("Entering index()...");
 		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
 		final String sessionId = context.getSessionIdentifier();
 		final String token = (String) context.getRequestAttribute(Pac4jConstants.CSRF_TOKEN);
+		logger.debug("Finishing index()...");
 		return ok(views.html.index.render(getProfiles(), token, sessionId));
+	}
+
+	public Result testTheme() {
+		final Form<PortalNetworkConfiguration> form = formFactory.form(PortalNetworkConfiguration.class);
+		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
+		final List<ConnectedUser> connectedUsers = ConnectionsService.connectedUsers( (Portal) playSessionStore.get(context, "portal"));
+		return ok(views.html.parts.test.render(form, connectedUsers));
 	}
 
 }

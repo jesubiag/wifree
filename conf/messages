@@ -1,0 +1,17 @@
+wifree=WiFree
+submit=Guardar
+
+menu.sidebar.dashboard=Dashboard
+menu.sidebar.connections=Conexiones
+menu.sidebar.portal-settings=Configuración del Portal
+menu.sidebar.portal-settings.applications=Aplicaciones
+menu.sidebar.portal-settings.login=Login
+menu.sidebar.analytics=Analytics
+menu.sidebar.users=Usuarios
+
+connections.title.timeout-settings=Configurar tiempo máximo de conexión
+connections.label.max-timeout=Tiempo máximo de conexión
+connections.title.connected-users=Usuarios en línea
+connections.users-table.header.user-name=Nombre de usuario
+connections.users-table.header.connection-start=Inicio de conexión
+connections.users-table.header.user-device=Dispositivo
