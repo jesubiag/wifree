@@ -3,13 +3,17 @@ package services;
 import daos.PortalNetworkConfigurationDAO;
 import models.Portal;
 import models.PortalNetworkConfiguration;
+import operations.requests.PortalNetworkConfigurationRequest;
+import operations.responses.PortalNetworkConfigurationResponse;
 import views.models.ConnectedUser;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.function.Function;
 
-public class ConnectionsService implements WiFreeService {
-
+public class ConnectionsService {
+	
 	public static void saveConnectionTimeout(PortalNetworkConfiguration portalNetworkConfiguration) {
 		if (isOk(portalNetworkConfiguration)) {
 			final PortalNetworkConfigurationDAO portalNetworkConfigurationDAO = new PortalNetworkConfigurationDAO();
