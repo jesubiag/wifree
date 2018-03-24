@@ -5,9 +5,9 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
 
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.5"
 
-crossScalaVersions := Seq("2.11.12", "2.12.4")
+crossScalaVersions := Seq("2.11.12", "2.12.5")
 
 //javacOptions ++= Seq("-Xlint:unchecked")
 
@@ -26,7 +26,7 @@ libraryDependencies ++= Seq(
     "com.typesafe.play" %% "play-json" % "2.6.9",
     "com.typesafe.play" % "play-cache_2.12" % playVersion,
 //    "uk.co.panaxiom" %% "play-jongo" % "2.0.0-jongo1.3",
-    "org.eu.acolyte" %% "play-reactive-mongo" % "1.0.47",
+    "org.reactivemongo" % "play2-reactivemongo_2.12" % "0.13.0-play26",
     "org.postgresql" % "postgresql" % "42.0.0",
     "org.webjars" % "bootstrap" % "3.0.0",
     "org.pac4j" %% "play-pac4j" % "5.0.0",
