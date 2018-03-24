@@ -2,13 +2,13 @@ package modules;
 
 import auth.AuthConstants;
 import auth.WiFreeAdminAuthenticator;
-import auth.WiFreeConsoleAuthenticator;
 import be.objectify.deadbolt.java.cache.HandlerCache;
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.typesafe.config.Config;
 import org.pac4j.core.authorization.authorizer.RequireAnyRoleAuthorizer;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.client.direct.AnonymousClient;
-import org.pac4j.core.config.Config;
 import org.pac4j.http.client.indirect.FormClient;
 import org.pac4j.play.CallbackController;
 import org.pac4j.play.LogoutController;
@@ -16,7 +16,6 @@ import org.pac4j.play.deadbolt2.Pac4jHandlerCache;
 import org.pac4j.play.deadbolt2.Pac4jRoleHandler;
 import org.pac4j.play.store.PlayCacheSessionStore;
 import org.pac4j.play.store.PlaySessionStore;
-import play.Configuration;
 import play.Environment;
 import play.cache.SyncCacheApi;
 
@@ -25,44 +24,26 @@ import play.cache.SyncCacheApi;
  */
 public class SecurityModule extends AbstractModule {
 
-	public final static String JWT_SALT = "11345678901234567890123456789012";
+	private final Config configuration;
+	
+	private final String baseUrl;
+	
+	private static class WiFreePac4jRoleHandler implements Pac4jRoleHandler { }
 
-	private final Configuration configuration;
-
-	private static class MyPac4jRoleHandler implements Pac4jRoleHandler { }
-
-	public SecurityModule(final Environment environment, final Configuration configuration) {
+	public SecurityModule(final Environment environment, final Config configuration) {
 		this.configuration = configuration;
+		baseUrl = configuration.getString("baseUrl");
 	}
 
 	@Override
 	protected void configure() {
-
 		bind(HandlerCache.class).to(Pac4jHandlerCache.class);
 
-		bind(Pac4jRoleHandler.class).to(MyPac4jRoleHandler.class);
+		bind(Pac4jRoleHandler.class).to(WiFreePac4jRoleHandler.class);
 		final PlayCacheSessionStore playCacheSessionStore = new PlayCacheSessionStore(getProvider(SyncCacheApi.class));
 		//bind(PlaySessionStore.class).toInstance(playCacheSessionStore);
 		bind(PlaySessionStore.class).to(PlayCacheSessionStore.class);
-
-		final String baseUrl = configuration.getString("baseUrl");
-
-		// Admin - HTTP - Form
-		final FormClient adminLoginClient = new FormClient(baseUrl + AuthConstants.ADMIN_LOGIN_URL, new WiFreeAdminAuthenticator());
-		//adminLoginClient.setName("AdminClient");
-
-		// Console - HTTP - Form
-		final FormClient consoleLoginClient = new FormClient(baseUrl + AuthConstants.CONSOLE_LOGIN_URL, new WiFreeConsoleAuthenticator());
-		consoleLoginClient.setName("ConsoleClient");
-
-		final Clients clients = new Clients(baseUrl + AuthConstants.CALLBACK_URL, adminLoginClient, consoleLoginClient, new AnonymousClient());
-
-		final Config config = new Config(clients);
-		config.addAuthorizer("admin", new RequireAnyRoleAuthorizer<>("ROLE_ADMIN"));
-		config.addAuthorizer("custom", new CustomAuthorizer());
-		config.setHttpActionAdapter(new DemoHttpActionAdapter());
-		bind(Config.class).toInstance(config);
-
+		
 		// callback
 		final CallbackController callbackController = new CallbackController();
 		callbackController.setDefaultUrl("/");
@@ -75,4 +56,32 @@ public class SecurityModule extends AbstractModule {
 		//logoutController.setDestroySession(true);
 		bind(LogoutController.class).toInstance(logoutController);
 	}
+	
+	@Provides
+	protected FormClient adminFormClient() {
+		final FormClient adminLoginClient = new FormClient(baseUrl + AuthConstants.ADMIN_LOGIN_URL, new WiFreeAdminAuthenticator());
+		//adminLoginClient.setName("AdminClient");
+		return adminLoginClient;
+	}
+	
+//	@Provides
+//	protected FormClient consoleLoginClient() {
+//		final FormClient consoleLoginClient = new FormClient(baseUrl + AuthConstants.CONSOLE_LOGIN_URL, new WiFreeConsoleAuthenticator());
+//		consoleLoginClient.setName("ConsoleClient");
+//		return consoleLoginClient;
+//	}
+	
+	@Provides
+	protected org.pac4j.core.config.Config provideConfig(FormClient adminLoginClient) {
+		final Clients clients = new Clients(baseUrl + AuthConstants.CALLBACK_URL, adminLoginClient, new AnonymousClient());
+		
+		final org.pac4j.core.config.Config config = new org.pac4j.core.config.Config(clients);
+		config.addAuthorizer("admin", new RequireAnyRoleAuthorizer<>("ROLE_ADMIN"));
+		config.addAuthorizer("custom", new CustomAuthorizer());
+//		config.addMatcher("excludedPath", new PathMatcher().excludeRegex("^/facebook/notprotected\\.html$"));
+		config.setHttpActionAdapter(new DemoHttpActionAdapter());
+		
+		return config;
+	}
+
 }

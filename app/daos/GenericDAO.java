@@ -2,6 +2,7 @@ package daos;
 
 import io.ebean.Ebean;
 import io.ebean.EbeanServer;
+import io.ebean.Expression;
 import play.Logger;
 
 import java.util.List;
@@ -13,6 +14,8 @@ public abstract class GenericDAO<T> {
 
 	protected EbeanServer server;
 	protected final Class<T> ENTITY_TYPE;
+	protected final Logger.ALogger logger = Logger.of(this.getClass());
+
 
 	protected GenericDAO(Class<T> cls) {
 		ENTITY_TYPE = cls;
@@ -21,23 +24,33 @@ public abstract class GenericDAO<T> {
 
 	public void save(T object) {
 		Ebean.save(object);
-		Logger.debug("Object saved={}", object);
+		logger.debug("Object saved={}", object);
 	}
 
 	public boolean delete(T object) {
 		boolean deleted = Ebean.delete(object);
-		if (deleted) Logger.debug("Object deleted={}", object);
+		if (deleted) logger.debug("Object deleted={}", object);
 		return deleted;
 	}
 
 	public <TID> T get(TID id) {
-		Logger.debug("Returning object type {} with id {}", ENTITY_TYPE, id);
+		logger.debug("Returning object type {} with id {}", ENTITY_TYPE, id);
 		return Ebean.find(ENTITY_TYPE, id);
 	}
 
 	public List<T> getAll() {
-		Logger.debug("Returning all objects type {}", ENTITY_TYPE);
+		logger.debug("Returning all objects type {}", ENTITY_TYPE);
 		return Ebean.find(ENTITY_TYPE).findList();
+	}
+
+	public List<T> listWhere(Expression expression) {
+		logger.debug("Returning all objects type {} matching {}", ENTITY_TYPE, expression);
+		return Ebean.find(ENTITY_TYPE).where(expression).findList();
+	}
+	
+	public T find(Expression expression) {
+		logger.debug("Returning first object of type {} matching {}", ENTITY_TYPE, expression);
+		return listWhere(expression).get(0);
 	}
 
 

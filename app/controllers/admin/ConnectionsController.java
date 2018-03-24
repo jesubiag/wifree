@@ -1,5 +1,6 @@
 package controllers.admin;
 
+import controllers.routes;
 import core.constants.ConnectionsConstants;
 import controllers.WiFreeController;
 import models.PortalNetworkConfiguration;
@@ -18,7 +19,7 @@ public class ConnectionsController extends WiFreeController implements Connectio
 		final Form<PortalNetworkConfiguration> form = formFactory.form(PortalNetworkConfiguration.class);
 		final PortalNetworkConfiguration portalNetworkConfiguration = form.bindFromRequest().get();
 		ConnectionsService.saveConnectionTimeout(portalNetworkConfiguration);
-		return redirect(controllers.routes.ApplicationController.testTheme()); // with something
+		return redirect(controllers.routes.AdminAppController.connections()); // with something
 	}
 
 
