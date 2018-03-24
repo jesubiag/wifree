@@ -2,8 +2,8 @@ package services.core.functions;
 
 import operations.requests.PortalNetworkConfigurationRequest;
 import operations.responses.PortalNetworkConfigurationResponse;
-import services.ServiceType;
-import services.WiFreeFunction;
+import services.core.ServiceType;
+import services.core.WiFreeFunction;
 
 import java.util.function.Function;
 

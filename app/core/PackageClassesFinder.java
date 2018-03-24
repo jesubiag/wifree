@@ -1,8 +1,8 @@
-package core.constants;
+package core;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.ClassPath;
-import services.WiFreeFunction;
+import services.core.WiFreeFunction;
 
 import java.io.IOException;
 import java.util.ArrayList;

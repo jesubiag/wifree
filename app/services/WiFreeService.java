@@ -1,8 +1,9 @@
 package services;
 
-import operations.core.Functions;
+import services.core.Functions;
 import operations.core.WiFreeRequest;
 import operations.core.WiFreeResponse;
+import services.core.WiFreeFunction;
 
 public abstract class WiFreeService {
 	

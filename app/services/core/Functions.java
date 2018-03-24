@@ -1,29 +1,40 @@
 package services.core;
 
-import services.TestingService;
-import services.WiFreeFunction;
-import services.WiFreeService;
+import core.PackageClassesFinder;
+import operations.core.WiFreeRequest;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Functions {
 	
-	static Map<Class<? extends WiFreeService>, List<? super WiFreeFunction>> functions;
+	private static Map<Class<? extends WiFreeRequest>, WiFreeFunction> allFunctions = new HashMap<>();
 	
 	static {
-//		functions.
+		try {
+			initialize();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	static public List<? super WiFreeFunction> get(Class<WiFreeService> service) {
-		return functions.get(service);
+	public static <RQ extends WiFreeRequest> WiFreeFunction of(RQ request) {
+		return allFunctions.get(request.getClass());
 	}
 	
-	static private void add(Class<WiFreeService> service, WiFreeFunction function) {
-		final List<? super WiFreeFunction> serviceFunctions = functions.get(service);
-		serviceFunctions.add(function);
-		functions.put(service, serviceFunctions);
+	private static void initialize() throws IllegalAccessException, InstantiationException {
+		final List<Class<? extends WiFreeFunction>> functionsClasses = PackageClassesFinder.getFunctionsClasses();
+		for (Class<? extends WiFreeFunction> functionClass : functionsClasses) {
+			put(functionClass.newInstance());
+		}
 	}
 	
+	private static <F extends WiFreeFunction> void put(F... serviceFunctions) {
+		Arrays.asList(serviceFunctions).stream().forEach(function -> allFunctions.put(function.rqClass(), function));
+	}
 	
 }

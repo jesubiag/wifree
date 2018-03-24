@@ -1,7 +1,8 @@
-package services;
+package services.core;
 
 import operations.core.WiFreeRequest;
 import operations.core.WiFreeResponse;
+import services.core.ServiceType;
 
 import java.util.function.Function;
 
