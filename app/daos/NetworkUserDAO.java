@@ -10,5 +10,5 @@ public class NetworkUserDAO extends GenericDAO<NetworkUser> {
 	public NetworkUserDAO() {
 		super(NetworkUser.class);
 	}
-
+	
 }

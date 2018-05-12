@@ -29,8 +29,10 @@ GET         /logout                           @org.pac4j.play.LogoutController.l
 GET         /assets/*file        controllers.Assets.versioned(path="/public", file: Asset)
 
 # Console routes
-GET			/console			controllers.ConsoleController.index
-GET         /console/login      controllers.ConsoleController.login
+GET			/console							controllers.ConsoleController.index
+GET         /console/login      				controllers.ConsoleController.login
+POST		/console/create-admin				controllers.ConsoleController.createAdmin
+POST		/console/create-portal				controllers.ConsoleController.createPortal
 
 # LoginController routes
 GET			/loginForm			controllers.LoginController.loginForm

@@ -3,14 +3,10 @@ package services;
 import daos.PortalNetworkConfigurationDAO;
 import models.Portal;
 import models.PortalNetworkConfiguration;
-import operations.requests.PortalNetworkConfigurationRequest;
-import operations.responses.PortalNetworkConfigurationResponse;
-import views.models.ConnectedUser;
+import views.dto.ConnectedUser;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.function.Function;
 
 public class ConnectionsService {
 	

@@ -29,5 +29,13 @@ public class StringHelper {
 			paragraph = lines.reduce( (l1, l2) -> new StringBuilder(l1).append("\n").append(l2).toString() ).orElse("");
 		return paragraph;
 	}
+	
+	public static boolean isEmpty(String string) {
+		return string == null || string.isEmpty() || string.trim().isEmpty();
+	}
+	
+	public static boolean isNotEmpty(String string) {
+		return !isEmpty(string);
+	}
 
 }

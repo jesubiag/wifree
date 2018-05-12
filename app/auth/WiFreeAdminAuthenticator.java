@@ -1,5 +1,6 @@
 package auth;
 
+import daos.AdminDAO;
 import org.pac4j.core.context.Pac4jConstants;
 import org.pac4j.core.context.WebContext;
 import org.pac4j.core.credentials.UsernamePasswordCredentials;
@@ -43,9 +44,11 @@ public class WiFreeAdminAuthenticator implements Authenticator<UsernamePasswordC
 	}
 
 	private String getPasswordFor(String username) {
-		if ( CommonHelper.areEquals(username, "admin") )
-			return "pass";
-		else
-			return "___error";
+		final AdminDAO adminDAO = new AdminDAO();
+		return adminDAO.getPasswordForUser(username);
+//		if ( CommonHelper.areEquals(username, "admin") )
+//			return "pass";
+//		else
+//			return "___error";
 	}
 }

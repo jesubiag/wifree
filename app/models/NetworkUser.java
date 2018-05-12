@@ -48,6 +48,10 @@ public class NetworkUser extends BaseModel {
 
 
 	public NetworkUser() {}
+	
+	public NetworkUser(Long id) {
+		this.id = id;
+	}
 
 	public NetworkUser(Portal portal, String name, String email, String lastUsedMACAddress, Instant lastConnection,
 					   boolean online, String password, Gender gender, Address address, Set<NetworkUserMACAddress> macAddresses,

@@ -12,7 +12,7 @@ import org.pac4j.play.store.PlaySessionStore;
 import play.data.Form;
 import play.mvc.Result;
 import services.ConnectionsService;
-import views.models.ConnectedUser;
+import views.dto.ConnectedUser;
 
 import javax.inject.Inject;
 import java.util.List;

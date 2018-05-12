@@ -50,6 +50,10 @@ public class Portal extends BaseModel {
 
 	public Portal() {
 	}
+	
+	public Portal(Long id) {
+		this.id = id;
+	}
 
 	public Portal(String name, String description, AccountType accountType, Admin owner, String homeURL, String facebookURL, String twitterURL, String googlePlusURL, String instagramURL) {
 		this.name = name;

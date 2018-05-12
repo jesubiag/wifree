@@ -1,4 +1,58 @@
-@()
+@(adminForm: Form[Admin], portalForm: Form[Portal], portals: List[Portal], admins: List[Admin])
 
-Console Index
+@import views.ViewsHelper
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+		<title>Admin Console</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("css/cosmo.bootstrap.min.css")">
+	</head>
+	<body>
+		<div class="container">
+			<h1>Console Index</h1>
+			<br>
+			<h2>Create Admin</h2>
+			@helper.form(routes.ConsoleController.createAdmin()) {
+				<div class="form-group">
+					<input list="portals" name="portal">
+					<datalist id="portals">
+					@portals.foreach { portal =>
+						<option value="@portal.getId">@portal.getName</option>
+					}
+					</datalist>
+					@helper.inputText(adminForm("name"), 'class -> "form-control")
+					@helper.inputText(adminForm("email"), 'class -> "form-control")
+					@helper.inputPassword(adminForm("password"), 'class -> "form-control")
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+			}
 
+			<br><hr><br>
+
+			<h2>CreatePortal</h2>
+			@helper.form(routes.ConsoleController.createPortal()) {
+				@helper.inputText(portalForm("name"), 'class -> "form-control")
+				@helper.inputText(portalForm("description"), 'class -> "form-control")
+				<div class="form-check">
+					@helper.inputRadioGroup(portalForm("accountType"), ViewsHelper.accountTypes)
+				</div>
+				@helper.input(portalForm("owner")) { (idOwner, nameOwner, valueOwner, argsOwner) =>
+					<input list="admins" name="@nameOwner" class="form-control">
+					<datalist id="admins">
+					@admins.foreach { admin =>
+						<option value="@admin.getId">@admin.getName</option>
+					}
+					</datalist>
+				}
+				@helper.inputText(portalForm("homeURL"), 'class -> "form-control")
+				@helper.inputText(portalForm("facebookURL"), 'class -> "form-control")
+				@helper.inputText(portalForm("twitterURL"), 'class -> "form-control")
+				@helper.inputText(portalForm("googlePlusURL"), 'class -> "form-control")
+				@helper.inputText(portalForm("instagramURL"), 'class -> "form-control")
+				<button type="submit" class="btn btn-primary">Submit</button>
+			}
+		</div>
+	</body>
+</html>

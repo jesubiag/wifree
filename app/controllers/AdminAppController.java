@@ -9,7 +9,7 @@ import org.pac4j.play.PlayWebContext;
 import play.data.Form;
 import play.mvc.Result;
 import services.ConnectionsService;
-import views.models.ConnectedUser;
+import views.dto.ConnectedUser;
 
 import java.util.List;
 

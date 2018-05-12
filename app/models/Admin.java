@@ -31,6 +31,10 @@ public class Admin extends BaseModel {
 
 	public Admin() {
 	}
+	
+	public Admin(Long id) {
+		this.id = id;
+	}
 
 	public Admin(Portal portal, String name, String email, String password, Instant lastConnection, boolean online) {
 		this.portal = portal;

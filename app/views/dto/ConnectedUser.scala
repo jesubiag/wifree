@@ -1,4 +1,4 @@
-package views.models
+package views.dto
 
 import java.util.Date
 

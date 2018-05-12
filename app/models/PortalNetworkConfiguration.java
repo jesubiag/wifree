@@ -23,6 +23,10 @@ public class PortalNetworkConfiguration extends BaseModel {
 
 	public PortalNetworkConfiguration() {
 	}
+	
+	public PortalNetworkConfiguration(Long id) {
+		this.id = id;
+	}
 
 	public PortalNetworkConfiguration(Integer connectionTimeout, LoginMethodType loginMethod, boolean enableBans) {
 		this.connectionTimeout = connectionTimeout;
