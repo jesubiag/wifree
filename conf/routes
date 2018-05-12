@@ -15,28 +15,28 @@ GET         /login                                  controllers.LoginController.
 POST		/connections/set-connection-timeout		controllers.admin.ConnectionsController.setConnectionTimeout
 
 # Pac4J Temp Routes
-GET         /loginForm                        controllers.LoginController.loginForm()
-GET         /form/index.html                  controllers.LoginController.formIndex()
-GET         /form/index.html.json             controllers.LoginController.formIndexJson()
-GET         /protected/index.html             controllers.LoginController.protectedIndex()
-GET         /callback                         @org.pac4j.play.CallbackController.callback()
-POST        /callback                         @org.pac4j.play.CallbackController.callback()
-GET         /casProxyCallback                 @org.pac4j.play.CallbackController.callback()
-POST        /casProxyCallback                 @org.pac4j.play.CallbackController.callback()
-GET         /logout                           @org.pac4j.play.LogoutController.logout()
+GET         /loginForm                        		controllers.LoginController.loginForm()
+GET         /form/index.html                 		controllers.LoginController.formIndex()
+GET         /form/index.html.json            		controllers.LoginController.formIndexJson()
+GET         /protected/index.html             		controllers.LoginController.protectedIndex()
+GET         /callback                        		@org.pac4j.play.CallbackController.callback()
+POST        /callback                         		@org.pac4j.play.CallbackController.callback()
+GET         /casProxyCallback                		@org.pac4j.play.CallbackController.callback()
+POST        /casProxyCallback                		@org.pac4j.play.CallbackController.callback()
+GET         /logout                          		@org.pac4j.play.LogoutController.logout()
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file        controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file        					controllers.Assets.versioned(path="/public", file: Asset)
 
 # Console routes
-GET			/console							controllers.ConsoleController.index
-GET         /console/login      				controllers.ConsoleController.login
-POST		/console/create-admin				controllers.ConsoleController.createAdmin
-POST		/console/create-portal				controllers.ConsoleController.createPortal
+GET			/console								controllers.ConsoleController.index
+GET         /console/login      					controllers.ConsoleController.login
+POST		/console/create-admin					controllers.ConsoleController.createAdmin
+POST		/console/create-portal					controllers.ConsoleController.createPortal
 
 # LoginController routes
-GET			/loginForm			controllers.LoginController.loginForm
-#GET		/admin				controllers.LoginController.adminLoginLanding
-#POST		/admin				controllers.LoginController.loginAdmin
+GET			/loginForm								controllers.LoginController.loginForm
+#GET		/admin									controllers.LoginController.adminLoginLanding
+#POST		/admin									controllers.LoginController.loginAdmin
 
 # AdminAppController routes
