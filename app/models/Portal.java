@@ -46,6 +46,9 @@ public class Portal extends BaseModel {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "portal")
 	private Set<PortalApp> applications = new HashSet<>();
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "portal")
+	private Set<AnalyticsQueryFilter> queryFilters = new HashSet<>();
 
 
 	public Portal() {
@@ -55,7 +58,8 @@ public class Portal extends BaseModel {
 		this.id = id;
 	}
 
-	public Portal(String name, String description, AccountType accountType, Admin owner, String homeURL, String facebookURL, String twitterURL, String googlePlusURL, String instagramURL) {
+	public Portal(String name, String description, AccountType accountType, Admin owner, String homeURL, String facebookURL,
+				  String twitterURL, String googlePlusURL, String instagramURL) {
 		this.name = name;
 		this.description = description;
 		this.accountType = accountType;

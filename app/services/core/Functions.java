@@ -16,9 +16,9 @@ public class Functions {
 		try {
 			initialize();
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			e.printStackTrace();				// TODO print properly
 		} catch (InstantiationException e) {
-			e.printStackTrace();
+			e.printStackTrace();				// TODO print properly
 		}
 	}
 	

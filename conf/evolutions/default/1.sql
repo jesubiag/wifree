@@ -31,6 +31,17 @@ create table admin (
   constraint pk_admin primary key (id)
 );
 
+create table analytics_query_filter (
+  id                            bigserial not null,
+  portal_id                     bigint not null,
+  name                          varchar(255) not null,
+  description                   varchar(255),
+  query                         varchar(255) not null,
+  when_created                  timestamptz not null,
+  when_modified                 timestamptz not null,
+  constraint pk_analytics_query_filter primary key (id)
+);
+
 create table network_user (
   id                            bigserial not null,
   portal_id                     bigint not null,
@@ -138,6 +149,9 @@ create table portal_network_configuration (
 
 alter table address add constraint fk_address_owner_id foreign key (owner_id) references network_user (id) on delete restrict on update restrict;
 
+alter table analytics_query_filter add constraint fk_analytics_query_filter_portal_id foreign key (portal_id) references portal (id) on delete restrict on update restrict;
+create index ix_analytics_query_filter_portal_id on analytics_query_filter (portal_id);
+
 alter table network_user add constraint fk_network_user_portal_id foreign key (portal_id) references portal (id) on delete restrict on update restrict;
 create index ix_network_user_portal_id on network_user (portal_id);
 
@@ -165,6 +179,9 @@ create index ix_portal_login_configuration_portal_id on portal_login_configurati
 
 alter table if exists address drop constraint if exists fk_address_owner_id;
 
+alter table if exists analytics_query_filter drop constraint if exists fk_analytics_query_filter_portal_id;
+drop index if exists ix_analytics_query_filter_portal_id;
+
 alter table if exists network_user drop constraint if exists fk_network_user_portal_id;
 drop index if exists ix_network_user_portal_id;
 
@@ -190,6 +207,8 @@ drop index if exists ix_portal_login_configuration_portal_id;
 drop table if exists address cascade;
 
 drop table if exists admin cascade;
+
+drop table if exists analytics_query_filter cascade;
 
 drop table if exists network_user cascade;
 

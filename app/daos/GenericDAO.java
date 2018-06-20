@@ -67,6 +67,10 @@ public abstract class GenericDAO<T extends BaseModel> {
 		}
 	}
 	
+	public T getOrCreate(T entity) {
+		return getOrCreate(entity.getId());
+	}
+	
 	protected T createEntity(Long id) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		final Constructor<T> idConstructor = ENTITY_TYPE.getConstructor(Long.class);
 		return idConstructor.newInstance(id);
