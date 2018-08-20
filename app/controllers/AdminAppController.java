@@ -33,7 +33,7 @@ public class AdminAppController extends WiFreeController {
 		final Form<PortalNetworkConfiguration> form = formFactory.form(PortalNetworkConfiguration.class);
 		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
 		final List<ConnectedUser> connectedUsers = ConnectionsService.connectedUsers( (Portal) playSessionStore.get(context, "portal"));
-		return ok(views.html.parts.test.render(form, connectedUsers));
+		return ok(views.html.connections.index.render(form, connectedUsers));
 	}
 
 	public Result portalSettings() {

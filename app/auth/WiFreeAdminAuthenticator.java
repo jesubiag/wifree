@@ -44,11 +44,11 @@ public class WiFreeAdminAuthenticator implements Authenticator<UsernamePasswordC
 	}
 
 	private String getPasswordFor(String username) {
-		final AdminDAO adminDAO = new AdminDAO();
-		return adminDAO.getPasswordForUser(username);
-//		if ( CommonHelper.areEquals(username, "admin") )
-//			return "pass";
-//		else
-//			return "___error";
+//		final AdminDAO adminDAO = new AdminDAO();
+//		return adminDAO.getPasswordForUser(username);
+		if ( CommonHelper.areEquals(username, "admin") )
+			return "pass";
+		else
+			return "___error";
 	}
 }
