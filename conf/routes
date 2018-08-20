@@ -12,7 +12,10 @@ GET         /analytics                              controllers.AdminAppControll
 GET         /connections                            controllers.AdminAppController.connections
 GET			/portal-settings						controllers.AdminAppController.portalSettings
 GET         /login                                  controllers.LoginController.login
+
 POST		/connections/set-connection-timeout		controllers.admin.ConnectionsController.setConnectionTimeout
+
+POST		/analytics/create-analytics-query		controllers.admin.AnalyticsController.createAnalyticsQuery
 
 # Pac4J Temp Routes
 GET         /loginForm                        		controllers.LoginController.loginForm()

@@ -24,4 +24,13 @@ public class AnalyticsController extends WiFreeController {
 		}
 	}
 	
+	public Result runAnalyticsQuery() {
+		final Form<AnalyticsQueryFilter> form = formFactory.form(AnalyticsQueryFilter.class);
+		final AnalyticsQueryFilter queryFilter = form.bindFromRequest().get();
+		
+		
+		
+		throw new IllegalArgumentException("To be implemented");
+	}
+	
 }

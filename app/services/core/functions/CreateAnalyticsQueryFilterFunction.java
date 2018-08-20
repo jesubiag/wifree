@@ -10,13 +10,7 @@ import services.core.WiFreeFunction;
 import java.util.function.Function;
 
 public class CreateAnalyticsQueryFilterFunction extends WiFreeFunction<CreateAnalyticsQueryFilterRequest, CreateAnalyticsQueryFilterResponse> {
-	
-	{
-		rqClass = CreateAnalyticsQueryFilterRequest.class;
-		rsClass = CreateAnalyticsQueryFilterResponse.class;
-		serviceType = ServiceType.TESTING_SERVICE;			// TODO TBD
-	}
-	
+
 	@Override
 	public Function<CreateAnalyticsQueryFilterRequest, CreateAnalyticsQueryFilterResponse> function() {
 		function = request -> {
@@ -26,6 +20,21 @@ public class CreateAnalyticsQueryFilterFunction extends WiFreeFunction<CreateAna
 			return new CreateAnalyticsQueryFilterResponse(analyticsQueryFilter, true, null); // TODO check
 		};
 		return function;
+	}
+	
+	@Override
+	public Class<CreateAnalyticsQueryFilterRequest> rqClass() {
+		return CreateAnalyticsQueryFilterRequest.class;
+	}
+	
+	@Override
+	public Class<CreateAnalyticsQueryFilterResponse> rsClass() {
+		return CreateAnalyticsQueryFilterResponse.class;
+	}
+	
+	@Override
+	public ServiceType serviceType() {
+		return ServiceType.TESTING_SERVICE;
 	}
 	
 }

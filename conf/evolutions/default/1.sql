@@ -36,9 +36,18 @@ create table analytics_query_filter (
   portal_id                     bigint not null,
   name                          varchar(255) not null,
   description                   varchar(255),
-  query                         varchar(255) not null,
+  time_period_type              varchar(8),
+  time_period                   varchar(255),
+  gender                        integer,
+  age_range                     varchar(255),
+  visits_amount                 varchar(255),
+  visitor_address               varchar(255),
+  days_of_the_week              varchar[],
+  hours                         varchar(255),
   when_created                  timestamptz not null,
   when_modified                 timestamptz not null,
+  constraint ck_analytics_query_filter_time_period_type check ( time_period_type in ('ABSOLUTE','RELATIVE','ERROR','NONE')),
+  constraint ck_analytics_query_filter_gender check ( gender in (0,1,2,3,4)),
   constraint pk_analytics_query_filter primary key (id)
 );
 

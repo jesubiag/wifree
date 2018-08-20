@@ -9,16 +9,25 @@ import java.util.function.Function;
 
 public class PortalNetworkConfigurationFunction extends WiFreeFunction<PortalNetworkConfigurationRequest, PortalNetworkConfigurationResponse> {
 	
-	{
-		rqClass = PortalNetworkConfigurationRequest.class;
-		rsClass = PortalNetworkConfigurationResponse.class;
-		serviceType = ServiceType.TESTING_SERVICE;
-	}
-	
 	@Override
 	public Function<PortalNetworkConfigurationRequest, PortalNetworkConfigurationResponse> function() {
 		function = request -> new PortalNetworkConfigurationResponse(request.name() + " and Charles");
 		return function;
+	}
+	
+	@Override
+	public Class<PortalNetworkConfigurationRequest> rqClass() {
+		return PortalNetworkConfigurationRequest.class;
+	}
+	
+	@Override
+	public Class<PortalNetworkConfigurationResponse> rsClass() {
+		return PortalNetworkConfigurationResponse.class;
+	}
+	
+	@Override
+	public ServiceType serviceType() {
+		return ServiceType.TESTING_SERVICE;
 	}
 	
 }

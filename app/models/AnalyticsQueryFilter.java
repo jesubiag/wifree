@@ -1,5 +1,7 @@
 package models;
 
+import io.ebean.annotation.DbArray;
+import io.ebean.annotation.DbEnumValue;
 import models.types.DayOfTheWeek;
 import models.types.Gender;
 import models.types.TimePeriodType;
@@ -7,6 +9,7 @@ import models.types.TimePeriodType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 public class AnalyticsQueryFilter extends BaseModel {
@@ -25,13 +28,14 @@ public class AnalyticsQueryFilter extends BaseModel {
 	
 	private Gender gender;					// enum values
 	
-	private String ageRange;				// 20-45
+	private String ageRange;				// n-N
 	
-	private String visitsAmount;			// >100, >200<1000, <2500
+	private String visitsAmount;			// n-N
 	
 	private String visitorAddress;			// anything
 	
-	private DayOfTheWeek day;				// MONDAY, TUESDAY... comma separated
+	@DbArray
+	private List<DayOfTheWeek> daysOfTheWeek;				// MONDAY, TUESDAY... comma separated
 	
 	private String hours;					// 18:30-21:30
 	
@@ -88,12 +92,12 @@ public class AnalyticsQueryFilter extends BaseModel {
 		this.visitorAddress = visitorAddress;
 	}
 	
-	public DayOfTheWeek getDay() {
-		return day;
+	public List<DayOfTheWeek> getDaysOfTheWeek() {
+		return daysOfTheWeek;
 	}
 	
-	public void setDay(DayOfTheWeek day) {
-		this.day = day;
+	public void setDaysOfTheWeek(List<DayOfTheWeek> daysOfTheWeek) {
+		this.daysOfTheWeek = daysOfTheWeek;
 	}
 	
 	public String getHours() {
