@@ -3,6 +3,7 @@ package controllers;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 import models.JsonContent;
 import org.pac4j.core.client.Client;
+import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.context.Pac4jConstants;
 import org.pac4j.core.exception.HttpAction;
@@ -45,7 +46,7 @@ public class LoginController extends Controller {
 	@Secure(clients = "AnonymousClient", authorizers = "csrfToken")
 	public Result index() throws Exception {
 		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
-		final String sessionId = context.getSessionStore().getOrCreateSessionId(context);
+		final String sessionId = context.getSessionIdentifier();
 		final String token = (String) context.getRequestAttribute(Pac4jConstants.CSRF_TOKEN);
 		// profiles (maybe be empty if not authenticated)
 		return ok(views.html.admin.index.render());
@@ -83,7 +84,7 @@ public class LoginController extends Controller {
 
 	public Result forceLogin() {
 		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
-		final Client client = config.getClients().findClient(context.getRequestParameter(Pac4jConstants.DEFAULT_CLIENT_NAME_PARAMETER));
+		final Client client = config.getClients().findClient(context.getRequestParameter(Clients.DEFAULT_CLIENT_NAME_PARAMETER));
 		try {
 			final HttpAction action = client.redirect(context);
 			return (Result) config.getHttpActionAdapter().adapt(action.getCode(), context);

@@ -35,7 +35,7 @@ public class ApplicationController extends WiFreeController {
 	public Result index() {
 		logger.debug("Entering index()...");
 		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
-		final String sessionId = context.getSessionStore().getOrCreateSessionId(context);
+		final String sessionId = context.getSessionIdentifier();
 		final String token = (String) context.getRequestAttribute(Pac4jConstants.CSRF_TOKEN);
 		logger.debug("Finishing index()...");
 		return ok(views.html.index.render(getProfiles(), token, sessionId));
@@ -45,7 +45,7 @@ public class ApplicationController extends WiFreeController {
 		final Form<PortalNetworkConfiguration> form = formFactory.form(PortalNetworkConfiguration.class);
 		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
 		final List<ConnectedUser> connectedUsers = ConnectionsService.connectedUsers( (Portal) playSessionStore.get(context, "portal"));
-		return ok(views.html.connections.index.render(form, connectedUsers));
+		return ok(views.html.parts.test.render(form, connectedUsers));
 	}
 
 }
