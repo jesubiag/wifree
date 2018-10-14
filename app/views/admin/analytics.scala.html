@@ -1,8 +1,160 @@
 @(profileList: java.util.List[org.pac4j.core.profile.CommonProfile])
+@import scala.collection.immutable.Map
 
-Analytics
-<br>
-@profiles() = { @profileList.toList }
-profiles: @profiles
-<br>
-<a href="/dashboard">Dashboard</a>
+@graphicData = @{Map(
+	"Direct Access" -> 335,
+	"E-mail Marketing" -> 310,
+	"Union Ad" -> 234,
+	"Video Ads" -> 135,
+	"Search Engine" -> 1548
+)}
+
+<!DOCTYPE html>
+<html lang="es">
+
+	<head>
+		@parts.head("WiFree")
+	</head>
+
+	<body class="nav-md">
+		<div class="container body">
+
+			<div class="main_container">
+
+				<div class="col-md-3 left_col">
+					<div class="left_col scroll-view">
+
+						<div class="navbar nav_title" style="border: 0;">
+							<a href="index.html" class="site_title"><i class="fa fa-paw"></i>
+								<span>WiFree</span>
+							</a>
+						</div>
+						<div class="clearfix"></div>
+
+						@parts.menu_profile_quickinfo()
+
+						<br />
+
+						@parts.sidebar_menu()
+						@parts.menu_footer_buttons()
+
+					</div>
+				</div>
+
+				@parts.top_navigation()
+
+				<!-- Page content -->
+				<div class="right_col" role="main">
+					<div class="row"></div>
+					<div class="row"></div>
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						<div class="x_panel">
+							<div class="x_title">
+								<h2>Donut Graph</h2>
+								<ul class="nav navbar-right panel_toolbox">
+									<li><a href="#"><i class="fa fa-chevron-up"></i></a>
+									</li>
+									<li class="dropdown">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+										<ul class="dropdown-menu" role="menu">
+											<li><a href="#">Settings 1</a>
+											</li>
+											<li><a href="#">Settings 2</a>
+											</li>
+										</ul>
+									</li>
+									<li><a href="#"><i class="fa fa-close"></i></a>
+									</li>
+								</ul>
+								<div class="clearfix"></div>
+							</div>
+							<div class="x_content">
+								<div id="echart_donut" style="height:350px;"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /Page content -->
+
+			</div>
+
+		</div>
+
+		@parts.resources_body()
+
+		<script>
+			var myChart = echarts.init(document.getElementById('echart_donut'), theme);
+			var graphicData = [];
+			@for((k,v) <- graphicData) {
+				graphicData.push({"name": "@k", "value": @v});
+			}
+			console.log(graphicData);
+			myChart.setOption({
+				tooltip: {
+					trigger: 'item',
+					formatter: "{a} <br/>{b} : {c} ({d}%)"
+				},
+				calculable: true,
+				legend: {
+					//orient: 'vertical',
+					//x: 'left',
+					x: 'center',
+					y: 'bottom',
+					//data: ['Direct Access', 'E-mail Marketing', 'Union Ad', 'Video Ads', 'Search Engine']
+					data: graphicData.map(function(e) { return e.name; })
+				},
+				toolbox: {
+					show: true,
+					feature: {
+						magicType: {
+							show: true,
+							type: ['pie', 'funnel'],
+							option: {
+								funnel: {
+									x: '25%',
+									width: '50%',
+									funnelAlign: 'center',
+									max: 1548
+								}
+							}
+						},
+						restore: {
+							show: true
+						},
+						saveAsImage: {
+							show: true
+						}
+					}
+				},
+				series: [{
+					name: 'Access to the resource',
+					type: 'pie',
+					radius: ['35%', '55%'],
+					itemStyle: {
+						normal: {
+							label: {
+								show: true
+							},
+							labelLine: {
+								show: true
+							}
+						},
+						emphasis: {
+							label: {
+								show: true,
+								position: 'center',
+								textStyle: {
+									fontSize: '14',
+									fontWeight: 'normal'
+								}
+							}
+						}
+					},
+					data: graphicData
+				}]
+			});
+		</script>
+
+	</body>
+
+</html>
