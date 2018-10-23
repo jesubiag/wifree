@@ -1,10 +1,11 @@
 @import play.api.libs.json.Json
+@import play.api.libs.json.JsValue
 @import org.pac4j.core.profile.CommonProfile
 @import java.util.{List => JList}
 
-@(profileList: JList[CommonProfile])
+@(profileList: JList[CommonProfile], graphicDataJson: JsValue)
 
-@graphicJson = @{Json.parse("""[{"name": "Direct Access","value": 335},{"name": "E-mail Marketing","value": 310},{"name": "Union Ad","value": 234},{"name": "Video Ads","value": 135},{"name": "Search Engine","value": 1548}]""").toString()}
+@graphicData = @{graphicDataJson.toString()}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -81,8 +82,7 @@
 
 		<script>
 			var myChart = echarts.init(document.getElementById('echart_donut'), theme);
-			var stringJson = '@graphicJson'.replace(/&quot;/g, '"');
-			var graphicData = JSON.parse(stringJson);
+			var graphicData = toJson('@graphicData');
 			myChart.setOption({
 				tooltip: {
 					trigger: 'item',

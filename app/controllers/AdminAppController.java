@@ -6,6 +6,8 @@ import models.PortalNetworkConfiguration;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.ProfileManager;
 import org.pac4j.play.PlayWebContext;
+import play.api.libs.json.JsValue;
+import play.api.libs.json.Json;
 import play.data.Form;
 import play.mvc.Result;
 import services.ConnectionsService;
@@ -25,7 +27,9 @@ public class AdminAppController extends WiFreeController {
 
 	@SubjectPresent(handlerKey = "FormClient", forceBeforeAuthCheck = true)
 	public Result analytics() {
-		return ok(views.html.admin.analytics.render(getProfiles()));
+		final String json = "[{\"name\": \"Direct Access\",\"value\": 335},{\"name\": \"E-mail Marketing\",\"value\": 310},{\"name\": \"Union Ad\",\"value\": 234},{\"name\": \"Video Ads\",\"value\": 135},{\"name\": \"Search Engine\",\"value\": 1548}]";
+		final JsValue jsValue = Json.parse(json);
+		return ok(views.html.admin.analytics.render(getProfiles(), jsValue));
 	}
 
 	@SubjectPresent(handlerKey = "FormClient", forceBeforeAuthCheck = true)
