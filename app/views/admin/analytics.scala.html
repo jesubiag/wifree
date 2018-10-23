@@ -1,13 +1,10 @@
-@(profileList: java.util.List[org.pac4j.core.profile.CommonProfile])
-@import scala.collection.immutable.Map
+@import play.api.libs.json.Json
+@import org.pac4j.core.profile.CommonProfile
+@import java.util.{List => JList}
 
-@graphicData = @{Map(
-	"Direct Access" -> 335,
-	"E-mail Marketing" -> 310,
-	"Union Ad" -> 234,
-	"Video Ads" -> 135,
-	"Search Engine" -> 1548
-)}
+@(profileList: JList[CommonProfile])
+
+@graphicJson = @{Json.parse("""[{"name": "Direct Access","value": 335},{"name": "E-mail Marketing","value": 310},{"name": "Union Ad","value": 234},{"name": "Video Ads","value": 135},{"name": "Search Engine","value": 1548}]""").toString()}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -84,11 +81,8 @@
 
 		<script>
 			var myChart = echarts.init(document.getElementById('echart_donut'), theme);
-			var graphicData = [];
-			@for((k,v) <- graphicData) {
-				graphicData.push({"name": "@k", "value": @v});
-			}
-			console.log(graphicData);
+			var stringJson = '@graphicJson'.replace(/&quot;/g, '"');
+			var graphicData = JSON.parse(stringJson);
 			myChart.setOption({
 				tooltip: {
 					trigger: 'item',
