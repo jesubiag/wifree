@@ -13,7 +13,7 @@ GET         /connections                            controllers.AdminAppControll
 GET			/portal-settings						controllers.AdminAppController.portalSettings
 GET         /login                                  controllers.LoginController.login
 
-POST		/connections/set-connection-timeout		controllers.admin.ConnectionsController.setConnectionTimeout
+POST		/connections/set-connection-timeout		controllers.admin.ConnectionsController.setConnectionTimeout()
 
 POST		/analytics/create-analytics-query		controllers.admin.AnalyticsController.createAnalyticsQuery
 

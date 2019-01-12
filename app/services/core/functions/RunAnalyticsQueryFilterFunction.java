@@ -8,6 +8,7 @@ import services.core.WiFreeFunction;
 
 import java.util.function.Function;
 
+@SuppressWarnings("unused")
 public class RunAnalyticsQueryFilterFunction extends WiFreeFunction<RunAnalyticsQueryFilterRequest, RunAnalyticsQueryFilterResponse> {
 
 	@Override

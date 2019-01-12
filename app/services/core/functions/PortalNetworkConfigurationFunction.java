@@ -7,6 +7,7 @@ import services.core.WiFreeFunction;
 
 import java.util.function.Function;
 
+@SuppressWarnings("unused")
 public class PortalNetworkConfigurationFunction extends WiFreeFunction<PortalNetworkConfigurationRequest, PortalNetworkConfigurationResponse> {
 	
 	@Override

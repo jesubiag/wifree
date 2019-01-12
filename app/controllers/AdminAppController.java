@@ -27,8 +27,10 @@ public class AdminAppController extends WiFreeController {
 
 	@SubjectPresent(handlerKey = "FormClient", forceBeforeAuthCheck = true)
 	public Result analytics() {
+		// Call something to get JSON
 		final String json = "[{\"name\": \"Direct Access\",\"value\": 335},{\"name\": \"E-mail Marketing\",\"value\": 310},{\"name\": \"Union Ad\",\"value\": 234},{\"name\": \"Video Ads\",\"value\": 135},{\"name\": \"Search Engine\",\"value\": 1548}]";
 		final JsValue jsValue = Json.parse(json);
+
 		return ok(views.html.admin.analytics.render(getProfiles(), jsValue));
 	}
 

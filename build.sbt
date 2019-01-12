@@ -44,3 +44,7 @@ libraryDependencies ++= Seq(
 testOptions in Test := Seq(Tests.Argument(TestFrameworks.JUnit, "-a", "-v"))
 
 routesGenerator := InjectedRoutesGenerator
+
+fork := true // required for "sbt run" to pick up javaOptions
+
+javaOptions += "-Dplay.editor=http://localhost:63342/api/file/?file=%s&line=%s"

@@ -32,9 +32,9 @@ public class Functions {
 			put(functionClass.newInstance());
 		}
 	}
-	
+
 	private static <F extends WiFreeFunction> void put(F... serviceFunctions) {
-		Arrays.asList(serviceFunctions).stream().forEach(function -> allFunctions.put(function.rqClass(), function));
+		Arrays.stream(serviceFunctions).forEach(function -> allFunctions.put(function.rqClass(), function));
 	}
 	
 }

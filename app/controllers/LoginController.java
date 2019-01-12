@@ -44,7 +44,7 @@ public class LoginController extends Controller {
 	}
 
 	@Secure(clients = "AnonymousClient", authorizers = "csrfToken")
-	public Result index() throws Exception {
+	public Result index() {
 		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
 		final String sessionId = context.getSessionIdentifier();
 		final String token = (String) context.getRequestAttribute(Pac4jConstants.CSRF_TOKEN);
