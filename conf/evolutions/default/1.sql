@@ -61,6 +61,7 @@ create table network_user (
   online                        boolean default false not null,
   password                      varchar(255),
   gender                        integer,
+  age                           integer not null,
   when_created                  timestamp not null,
   when_modified                 timestamp not null,
   constraint ck_network_user_gender check ( gender in (0,1,2,3,4)),
@@ -69,6 +70,7 @@ create table network_user (
 
 create table network_user_connection_log (
   id                            bigint auto_increment not null,
+  portal_id                     bigint not null,
   network_user_id               bigint not null,
   connection_start_date         timestamp,
   connection_end_date           timestamp,
@@ -164,6 +166,9 @@ create index ix_analytics_query_filter_portal_id on analytics_query_filter (port
 alter table network_user add constraint fk_network_user_portal_id foreign key (portal_id) references portal (id) on delete restrict on update restrict;
 create index ix_network_user_portal_id on network_user (portal_id);
 
+alter table network_user_connection_log add constraint fk_network_user_connection_log_portal_id foreign key (portal_id) references portal (id) on delete restrict on update restrict;
+create index ix_network_user_connection_log_portal_id on network_user_connection_log (portal_id);
+
 alter table network_user_connection_log add constraint fk_network_user_connection_log_network_user_id foreign key (network_user_id) references network_user (id) on delete restrict on update restrict;
 create index ix_network_user_connection_log_network_user_id on network_user_connection_log (network_user_id);
 
@@ -193,6 +198,9 @@ drop index if exists ix_analytics_query_filter_portal_id;
 
 alter table network_user drop constraint if exists fk_network_user_portal_id;
 drop index if exists ix_network_user_portal_id;
+
+alter table network_user_connection_log drop constraint if exists fk_network_user_connection_log_portal_id;
+drop index if exists ix_network_user_connection_log_portal_id;
 
 alter table network_user_connection_log drop constraint if exists fk_network_user_connection_log_network_user_id;
 drop index if exists ix_network_user_connection_log_network_user_id;

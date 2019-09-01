@@ -1,5 +1,7 @@
 package utils;
 
+import scala.Tuple2;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Stream;
@@ -36,6 +38,19 @@ public class StringHelper {
 	
 	public static boolean isNotEmpty(String string) {
 		return !isEmpty(string);
+	}
+	
+	public static Tuple2<String, String> splitHyphen(String string) {
+		return split(string, "-");
+	}
+	
+	public static Tuple2<String, String> splitBlank(String string) {
+		return split(string, " ");
+	}
+	
+	public static Tuple2<String, String> split(String string, String character) {
+		final String[] splitted = string.split(character);
+		return Tuple2.apply(splitted[0], splitted[1]);
 	}
 
 }

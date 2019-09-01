@@ -24,7 +24,7 @@ public class AnalyticsQueryFilter extends BaseModel {
 	
 	private TimePeriodType timePeriodType;	// RELATIVE, ABSOLUTE
 	
-	private String timePeriod;				// LAST_DAY, LAST_WEEK... OR 2018-06-12T00:08:30Z 2018-06-15T20:08:30Z
+	private String timePeriod;				// LAST_DAY, LAST_WEEK... OR 2018-06-12T00:08:30Z 201N8-06-15T20:08:30Z
 	
 	private Gender gender;					// enum values
 	
@@ -35,14 +35,13 @@ public class AnalyticsQueryFilter extends BaseModel {
 	private String visitorAddress;			// anything
 	
 	@DbArray
-	private List<DayOfTheWeek> daysOfTheWeek;				// MONDAY, TUESDAY... comma separated
+	private List<DayOfTheWeek> daysOfTheWeek;	// MONDAY, TUESDAY... comma separated
 	
 	private String hours;					// 18:30-21:30
 	
 	
 	public AnalyticsQueryFilter() {
 	}
-	
 	
 	public TimePeriodType getTimePeriodType() {
 		return timePeriodType;

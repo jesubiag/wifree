@@ -45,6 +45,8 @@ public class NetworkUser extends BaseModel {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<NetworkUserSocialNetworkAccount> socialNetworkAccounts = new HashSet<>();
+	
+	private int age;
 
 
 	public NetworkUser() {}
@@ -55,7 +57,7 @@ public class NetworkUser extends BaseModel {
 
 	public NetworkUser(Portal portal, String name, String email, String lastUsedMACAddress, Instant lastConnection,
 					   boolean online, String password, Gender gender, Address address, Set<NetworkUserMACAddress> macAddresses,
-					   Set<NetworkUserSocialNetworkAccount> socialNetworkAccounts) {
+					   Set<NetworkUserSocialNetworkAccount> socialNetworkAccounts, int age) {
 		this.portal = portal;
 		this.name = name;
 		this.email = email;
@@ -67,6 +69,7 @@ public class NetworkUser extends BaseModel {
 		this.address = address;
 		this.macAddresses = macAddresses;
 		this.socialNetworkAccounts = socialNetworkAccounts;
+		this.age = age;
 	}
 
 
@@ -162,5 +165,13 @@ public class NetworkUser extends BaseModel {
 
 	public void setSocialNetworkAccounts(Set<NetworkUserSocialNetworkAccount> socialNetworkAccounts) {
 		this.socialNetworkAccounts = socialNetworkAccounts;
+	}
+	
+	public int getAge() {
+		return this.age;
+	}
+	
+	public void setAge(int age) {
+		this.age = age;
 	}
 }

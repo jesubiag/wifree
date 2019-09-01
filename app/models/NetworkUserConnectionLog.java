@@ -1,5 +1,7 @@
 package models;
 
+import io.ebean.annotation.Aggregation;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.time.Instant;
@@ -10,6 +12,7 @@ import java.time.Instant;
 @Entity
 public class NetworkUserConnectionLog extends BaseModel {
 
+	@ManyToOne(optional = false)
 	private Portal portal;
 
 	@ManyToOne(optional = false)
