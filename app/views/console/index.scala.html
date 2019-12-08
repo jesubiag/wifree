@@ -18,7 +18,7 @@
 				<div class="form-group">
 					<input list="portals" name="portal">
 					<datalist id="portals">
-					@portals.foreach { portal =>
+					@portals.map { portal =>
 						<option value="@portal.getId">@portal.getName</option>
 					}
 					</datalist>

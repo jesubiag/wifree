@@ -36,14 +36,14 @@ public class ConsoleController extends WiFreeController {
 		final Form<Admin> adminForm = formFactory.form(Admin.class).bindFromRequest();
 		final Admin admin = adminForm.get();
 		admin.save();
-		return ok();
+		return ok("*** User ***\n" + admin.toLogString() + "\n*** saved ***");
 	}
 	
 	public Result createPortal() {
 		final Form<Portal> portalForm = formFactory.form(Portal.class).bindFromRequest();
 		final Portal portal = portalForm.get();
 		portal.save();
-		return ok();
+		return ok("*** Portal ***\n" + portal.toLogString() + "\n*** saved ***");
 	}
 
 }

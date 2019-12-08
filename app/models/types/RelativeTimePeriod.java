@@ -6,7 +6,7 @@ import io.ebean.annotation.EnumValue;
 import utils.DateHelper;
 
 import java.time.Instant;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 
 
@@ -20,25 +20,35 @@ public enum RelativeTimePeriod {
 	@EnumValue("THIS_WEEK") THIS_WEEK(buildExpression(DateHelper::weekBeginning)),
 	@EnumValue("THIS_MONTH") THIS_MONTH(buildExpression(DateHelper::monthBeginning)),
 	@EnumValue("THIS_YEAR") THIS_YEAR(buildExpression(DateHelper::yearBeginning)),
-	@EnumValue("ERROR") ERROR((String date) -> { throw new IllegalArgumentException("There is no valid Expression value for ERROR"); } );
+	@EnumValue("BEFORE_THIS_WEEK") BEFORE_THIS_WEEK(buildInvertedExpression(DateHelper::weekBeginning)),
+	@EnumValue("BEFORE_LAST_WEEK") BEFORE_LAST_WEEK(buildInvertedExpression(DateHelper::oneWeekAgo)),
+	@EnumValue("ERROR") ERROR((String date, Instant now) -> { throw new IllegalArgumentException("There is no valid Expression value for ERROR"); } );
 
-	private final Function<String, Expression> expr;
+	private final BiFunction<String, Instant, Expression> expr;
 
-	RelativeTimePeriod(Function<String, Expression> expressionFunction) {
+	RelativeTimePeriod(BiFunction<String, Instant, Expression> expressionFunction) {
 		this.expr = expressionFunction;
 	}
 	
-	public Function<String, Expression> getExpression() {
+	public BiFunction<String, Instant, Expression> getExpression() {
 		return expr;
 	}
 	
-	private static Function<String, Expression> buildExpression(UnaryOperator<Instant> operator) {
-		return (String propertyName) -> between(propertyName, operator);
+	private static BiFunction<String, Instant, Expression> buildExpression(UnaryOperator<Instant> operator) {
+		return (String propertyName, Instant now) -> between(propertyName, operator, now);
 	}
-	
-	private static Expression between(String propertyName, UnaryOperator<Instant> operator) {
-		final Instant now = DateHelper.now();
+
+	private static BiFunction<String, Instant, Expression> buildInvertedExpression(UnaryOperator<Instant> operator) {
+		return (String propertyName, Instant now) -> betweenInverted(propertyName, operator, now);
+	}
+
+	private static Expression between(String propertyName, UnaryOperator<Instant> operator, Instant now) {
 		return Expr.between(propertyName, operator.apply(now), now);
+	}
+
+	private static Expression betweenInverted(String propertyName, UnaryOperator<Instant> operator, Instant now) {
+		Instant min = DateHelper.min();
+		return Expr.between(propertyName, min, operator.apply(now));
 	}
 
 }

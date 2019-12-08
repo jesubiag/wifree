@@ -8,7 +8,11 @@ import play.Logger;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 /**
  * Created by jesu on 12/06/17.
@@ -28,6 +32,11 @@ public abstract class GenericDAO<T extends BaseModel> {
 	public void save(T object) {
 		Ebean.save(object);
 		logger.debug("Object saved={}", object);
+	}
+
+	public void saveAll(T... objects) {
+		Ebean.saveAll(asList(objects));
+		logger.debug("Objects saved={}", objects);
 	}
 
 	public boolean delete(T object) {

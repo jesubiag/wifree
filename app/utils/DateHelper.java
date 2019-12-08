@@ -2,71 +2,85 @@ package utils;
 
 import scala.Tuple2;
 
-import java.time.DayOfWeek;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.function.Function;
 
 public class DateHelper {
 	
-	private static final ZoneId zone = ZoneId.systemDefault();
-	
+//	private static final ZoneId zone = ZoneId.systemDefault();
+	private static final ZoneId zone = ZoneId.of("UTC");
+
 	// Public methods
-	
+
+	public static int hourBeginning(Instant date) {
+		return date.atZone(zone).getHour();
+	}
+
 	public static Instant dayBeginning(Instant date) {
 		return processInstant(localDate -> localDate.atStartOfDay(zone).toLocalDate(), date);
 	}
-	
+
 	public static Instant weekBeginning(Instant date) {
 		return processInstant(localDate -> localDate.with(DayOfWeek.MONDAY), date);
 	}
-	
+
 	public static Instant monthBeginning(Instant date) {
 		return processInstant(localDate -> localDate.withDayOfMonth(1), date);
 	}
-	
+
 	public static Instant yearBeginning(Instant date) {
 		return processInstant(localDate -> localDate.withDayOfYear(1), date);
 	}
-	
+
 	public static Instant oneDayAgo(Instant date) {
 		return processInstant(localDate -> localDate.minusDays(1), date);
 	}
-	
+
 	public static Instant oneWeekAgo(Instant date) {
 		return processInstant(localDate -> localDate.minusWeeks(1), date);
 	}
-	
+
 	public static Instant oneMonthAgo(Instant date) {
 		return processInstant(localDate -> localDate.minusMonths(1), date);
 	}
-	
+
 	public static Instant oneYearAgo(Instant date) {
 		return processInstant(localDate -> localDate.minusYears(1), date);
 	}
-	
+
 	public static Instant now() {
 		return Instant.now();
 	}
-	
+
+	public static Instant min() {
+		return Instant.parse("1970-01-01T00:00:00.000Z");
+	}
+
 	public static Tuple2<Instant, Instant> strings2Dates(String dates) {
 		final Tuple2<String, String> splittedDatesStrings = StringHelper.splitBlank(dates);
 		return Tuple2.apply(Instant.parse(splittedDatesStrings._1()), Instant.parse(splittedDatesStrings._2()));
 	}
-	
+
+	public static long between(Instant latestDate, Instant earlierDate) {
+		return toLocalDateTime(latestDate).until(toLocalDateTime(earlierDate), ChronoUnit.SECONDS);
+	}
+
 	// Private methods
-	
+
 	private static Instant processInstant(Function<LocalDate, LocalDate> f, Instant instant) {
 		return toInstant(f.apply(toLocalDate(instant)));
 	}
-	
+
 	private static LocalDate toLocalDate(Instant instant) {
 		return instant.atZone(zone).toLocalDate();
 	}
-	
+
+	private static LocalDateTime toLocalDateTime(Instant instant) {
+		return instant.atZone(zone).toLocalDateTime();
+	}
+
 	private static Instant toInstant(LocalDate localDate) {
 		return localDate.atStartOfDay(zone).toInstant();
 	}
-	
 }

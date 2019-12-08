@@ -37,7 +37,8 @@ libraryDependencies ++= Seq(
     "be.objectify" % "deadbolt-java_2.12" % "2.6.3",
     javaJdbc % Test,
     "org.assertj" % "assertj-core" % "3.6.2" % Test,
-    "org.awaitility" % "awaitility" % "2.0.0" % Test
+    "org.awaitility" % "awaitility" % "2.0.0" % Test,
+    "org.mockito" % "mockito-all" % "1.10.19" % Test
 )
 
 // Make verbose tests

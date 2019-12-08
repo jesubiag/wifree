@@ -7,6 +7,7 @@ import services.core.ServiceType;
 import java.util.function.Function;
 
 public abstract class WiFreeFunction<RQ extends WiFreeRequest, RS extends WiFreeResponse> {
+
 	
 	protected Function<RQ, RS> function;
 	

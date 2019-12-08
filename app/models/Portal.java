@@ -74,7 +74,7 @@ public class Portal extends BaseModel {
 
 	@Override
 	public String toLogString() {
-		return toLogString("id: " + id, "name: " + name, "admin: " + owner, "homeURL: " + homeURL, "facebookURL: " + facebookURL,
+		return toLogString("id: " + id, "name: " + name, "admin: " + owner.toLogString(), "homeURL: " + homeURL, "facebookURL: " + facebookURL,
 				"twitterURL: " + twitterURL, "googlePlusURL: " + googlePlusURL, "instagramURL: " + instagramURL);
 	}
 

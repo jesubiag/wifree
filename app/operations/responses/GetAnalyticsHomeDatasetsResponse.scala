@@ -5,8 +5,12 @@ import models.types.{DayOfTheWeek, Gender, RelativeTimePeriod, TimePeriodType}
 import operations.core.{ResponseType, WiFreeResponse}
 import utils.DateHelper
 import java.util.function.{Function => JFunction}
-import java.util.stream.Collectors
+import java.util.function.BiFunction
 import java.lang.{Long => JLong}
+import java.time.Instant
+
+import models.types.RelativeTimePeriod.{BEFORE_LAST_WEEK, LAST_WEEK, LAST_YEAR}
+import models.types.TimePeriodType.{ABSOLUTE, NONE, RELATIVE}
 
 import scala.collection.JavaConverters._
 import utils.ScalaHelper._
@@ -25,28 +29,28 @@ case class GetAnalyticsHomeDatasetsResponse(datasetFilters: Seq[DatasetFilter]) 
 }
 
 case class DatasetFilter(portalId: Long,
-						 name: String,
-						 description: String,
-						 timePeriod: String,
-						 timePeriodType: TimePeriodType,
-						 gender: Option[Gender],
-						 age: Option[MinMax[Int]],
-						 visitsAmount: Option[MinMax[Int]],
-						 visitorAddress: Option[String],
-						 daysOfTheWeek: Option[Seq[DayOfTheWeek]],
-						 hours: Option[(String, String)]
-						) {
+												 name: String,
+												 description: String,
+												 timePeriod: String,
+												 timePeriodType: TimePeriodType,
+												 gender: Option[Gender],
+												 age: Option[MinMax[Int]],
+												 visitsAmount: Option[MinMax[Int]],
+												 visitorAddress: Option[String],
+												 daysOfTheWeek: Option[Seq[DayOfTheWeek]],
+												 hours: Option[(String, String)]
+												) {
 	
-	def timePeriodExpression: Option[JFunction[String, Expression]] = timePeriodType match {
-		case TimePeriodType.ABSOLUTE => val (startDate, endDate) = DateHelper.strings2Dates(timePeriod)
-			Option((propertyName: String) => Expr.between(propertyName, startDate, endDate))
-		case TimePeriodType.RELATIVE => Option(RelativeTimePeriod.valueOf(timePeriod).getExpression)
-		case TimePeriodType.NONE => None
+	def timePeriodExpression: Option[BiFunction[String, Instant, Expression]] = timePeriodType match {
+		case ABSOLUTE => val (startDate, endDate) = DateHelper.strings2Dates(timePeriod)
+			Option((propertyName: String, _: Instant) => Expr.between(propertyName, startDate, endDate))
+		case RELATIVE => Option(RelativeTimePeriod.valueOf(timePeriod).getExpression)
+		case NONE => None
 		case u => throw new Exception(s"Unknown timePeriodType: $u")
 	}
 	
 	def expressions: BuiltExpressions = {
-		val portalExpression = Option(Expr.eq("portal", portalId))
+		val portalExpression = Option(Expr.eq("portal.id", portalId))
 		val genderExpression = gender.map(g => Expr.ieq("networkUser.gender", g.toString))
 		val ageExpression = age.map(a => a.expr("networkUser.age"))
 		val visitsAmountQuery = VisitsAmountQuery(visitsAmount.map { mm =>
@@ -86,15 +90,41 @@ case class DatasetFilter(portalId: Long,
 	}
 }
 
+object DatasetFilter {
+
+	def usersConnectedLastWeekFilter(portalId: Long): DatasetFilter = relativeTimePeriodFilter(portalId, LAST_WEEK)
+
+	def usersConnectedBeforeLastWeekFilter(portalId: Long): DatasetFilter = relativeTimePeriodFilter(portalId, BEFORE_LAST_WEEK)
+
+	def usersConnectedLastYearFilter(portalId: Long): DatasetFilter = relativeTimePeriodFilter(portalId, LAST_YEAR)
+
+	private def relativeTimePeriodFilter(portalId: Long, relativeTimePeriod: RelativeTimePeriod) = DatasetFilter(
+		portalId = portalId,
+		name = "",
+		description = "",
+		timePeriod = relativeTimePeriod.toString,
+		timePeriodType = TimePeriodType.RELATIVE,
+		gender = None,
+		age = None,
+		visitsAmount = None,
+		visitorAddress = None,
+		daysOfTheWeek = None,
+		hours = None
+	)
+
+}
+
 case class MinMax[T](min: T, max: T) {
 	def expr: String => Expression = (propertyName: String) => Expr.between(propertyName, min, max)
 }
 
-case class BuiltExpressions(timePeriodExpression: Option[JFunction[String, Expression]], visitsAmountQuery: VisitsAmountQuery, parameterlessExpressions: Seq[Expression])
+case class BuiltExpressions(timePeriodExpression: Option[BiFunction[String, Instant, Expression]],
+														visitsAmountQuery: VisitsAmountQuery,
+														parameterlessExpressions: Seq[Expression])
 
 case class VisitsAmountQuery(maybeSqlQuery: Option[SqlQuery]) {
 	private def build: Option[List[JLong]] = maybeSqlQuery.map { sqlQuery =>
 		sqlQuery.findList().asScala.map(row => row.getLong("network_user_id")).toList
 	}
-	def expression: Option[Expression] = build.map(ids => Expr.in("networkUser", JavaConverters.asJavaCollection(ids)))
+	def expression: Option[Expression] = build.map(ids => Expr.in("networkUser.id", JavaConverters.asJavaCollection(ids)))
 }
