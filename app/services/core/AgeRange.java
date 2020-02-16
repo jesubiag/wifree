@@ -5,6 +5,9 @@ import scala.Tuple2;
 import java.util.Arrays;
 import java.util.List;
 
+import static services.core.AnyRange.range;
+
+@SuppressWarnings("WeakerAccess")
 public class AgeRange {
 
     public static final Tuple2<Integer, Integer> RANGE_0_TO_20 = range(0, 20);
@@ -16,9 +19,5 @@ public class AgeRange {
     public static final List<Tuple2<Integer, Integer>> values = Arrays.asList(
         RANGE_0_TO_20, RANGE_21_TO_30, RANGE_31_TO_40, RANGE_41_TO_50, RANGE_51_TO_150
     );
-
-    private static Tuple2<Integer, Integer> range(Integer min, Integer max) {
-        return Tuple2.apply(min, max);
-    }
 
 }

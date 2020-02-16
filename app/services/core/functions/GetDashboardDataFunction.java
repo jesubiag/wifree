@@ -25,6 +25,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static services.core.AnyRange.toRange;
 import static utils.DateHelper.between;
 
 @SuppressWarnings("unused")
@@ -151,13 +152,6 @@ public class GetDashboardDataFunction
         return () -> logsThisWeek.stream()
                         .map(NetworkUserConnectionLog::getNetworkUser)
                         .distinct();
-    }
-
-    private Tuple2<Integer, Integer> toRange(List<Tuple2<Integer, Integer>> ranges, Integer value) {
-        return ranges.stream()
-                .filter(range -> range._1 <= value && value <= range._2)
-                .findFirst()
-                .get();
     }
 
     private long usersOnline(List<NetworkUserConnectionLog> logsLastWeek, Instant now) {

@@ -1,54 +1,324 @@
-@(profileList: java.util.List[org.pac4j.core.profile.CommonProfile])
+@import play.api.libs.json.JsValue
+@(profileList: java.util.List[org.pac4j.core.profile.CommonProfile], jsGenderGraphData: JsValue, jsAgeGraphData: JsValue, jsConnectionsGraphDataThisWeek: JsValue, jsConnectionsGraphDataLastWeek: JsValue)
+
+@genderGraphData = @{jsGenderGraphData.toString()}
+@ageGraphData = @{jsAgeGraphData.toString()}
+@connectionsGraphDataThisWeek = @{jsConnectionsGraphDataThisWeek.toString()}
+@connectionsGraphDataLastWeek = @{jsConnectionsGraphDataLastWeek.toString()}
 
 <!DOCTYPE html>
 <html lang="es">
 
-	<head>
-		@parts.head("WiFree")
-	</head>
+<head>
+	@parts.head("WiFree")
+</head>
 
-	<body class="nav-md">
-		<div class="container body">
+<body class="nav-md">
+<div class="container body">
 
-			<div class="main_container">
+	<div class="main_container">
 
-				<div class="col-md-3 left_col">
-					<div class="left_col scroll-view">
+		<div class="col-md-3 left_col">
+			<div class="left_col scroll-view">
 
-						<div class="navbar nav_title" style="border: 0;">
-							<a href="index.html" class="site_title"><i class="fa fa-paw"></i>
-								<span>WiFree</span></a>
+				<div class="navbar nav_title" style="border: 0;">
+					<a href="index.html" class="site_title"><i class="fa fa-paw"></i>
+						<span>WiFree</span></a>
+				</div>
+				<div class="clearfix"></div>
+
+				@parts.menu_profile_quickinfo()
+
+				<br />
+
+				@parts.sidebar_menu()
+				@parts.menu_footer_buttons()
+
+			</div>
+		</div>
+
+		@parts.top_navigation()
+
+		<!-- Page content -->
+		<div class="right_col" role="main">
+			<div class="">
+				<div class="row">
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						<div class="x_panel">
+							<div class="x_content">
+
+								<div id="echart_line" style="width: 100%; height:280px; margin: 0px 0px 0"></div>
+
+							</div>
 						</div>
-						<div class="clearfix"></div>
+					</div>
+					<div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+						<div class="tile-stats">
+							<div class="icon"><i class="fa fa-comments-o"></i></div>
+							<div class="count">179</div>
+							<h3>Users Online</h3>
 
-						@parts.menu_profile_quickinfo()
+						</div>
+					</div>
+					<div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+						<div class="tile-stats">
+							<div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
+							<div class="count">-17%</div>
+							<h3>Online Comparison</h3>
 
-						<br />
-
-						@parts.sidebar_menu()
-						@parts.menu_footer_buttons()
-
+						</div>
+					</div>
+					<div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+						<div class="tile-stats">
+							<div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
+							<div class="count">54</div>
+							<h3>New Users</h3>
+						</div>
+					</div>
+					<div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+						<div class="tile-stats">
+							<div class="icon"><i class="fa fa-comments-o"></i></div>
+							<div class="count">14%</div>
+							<h3>User's Loyalty</h3>
+						</div>
+					</div>
+					<div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+						<div class="tile-stats">
+							<div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
+							<div class="count">Saturday</div>
+							<h3>Busiest day</h3>
+						</div>
+					</div>
+					<div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+						<div class="tile-stats">
+							<div class="icon"><i class="fa fa-comments-o"></i></div>
+							<div class="count">17:00</div>
+							<h3>Busiest time</h3>
+						</div>
 					</div>
 				</div>
 
-				@parts.top_navigation()
 
-				<!-- Page content -->
-				<div class="right_col" role="main">
-					@parts.top_tiles()
+				<div class="row">
+					<div class="col-md-6">
+						<div class="x_panel">
+							<div class="x_content">
 
-					<div class="row"></div>
-					<div class="row"></div>
+								<div id="echart_bar_horizontal" style="height:350px;"></div>
 
+							</div>
+						</div>>
+					</div>
+					<div class="col-md-6">
+						<div class="x_panel">
+							<div class="x_content">
+
+								<div id="echart_donut" style="height:350px;"></div>
+
+							</div>
+						</div>
+					</div>
 				</div>
-				<!-- /Page content -->
-
 			</div>
-
 		</div>
+		<!-- /Page content -->
 
-		@parts.resources_body()
+	</div>
 
-	</body>
+</div>
+
+@parts.resources_body()
+
+<script>
+	  var echartLine = echarts.init(document.getElementById('echart_line'), theme);
+      echartLine.setOption({
+        title: {
+          text: 'Connected Users',
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          x: 220,
+          y: 40,
+          data: ['This week', 'Last week']
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            magicType: {
+              show: true,
+              title: {
+                line: 'Line',
+                bar: 'Bar',
+                stack: 'Stack',
+                tiled: 'Tiled'
+              },
+              type: ['line', 'bar', 'stack', 'tiled']
+            },
+            restore: {
+              show: true,
+              title: "Restore"
+            },
+            saveAsImage: {
+              show: true,
+              title: "Save Image"
+            }
+          }
+        },
+        calculable: true,
+        xAxis: [{
+          type: 'category',
+          boundaryGap: false,
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        }],
+        yAxis: [{
+          type: 'value'
+        }],
+        series: [{
+          name: 'This week',
+          type: 'line',
+          smooth: true,
+          itemStyle: {
+            normal: {
+              areaStyle: {
+                type: 'default'
+              }
+            }
+          },
+          data: [10, 12, 21, 54, 260, 830, 710]
+         }, {
+          name: 'Last week',
+          type: 'line',
+          smooth: true,
+          itemStyle: {
+            normal: {
+              areaStyle: {
+                type: 'default'
+              }
+            }
+          },
+          data: [30, 182, 434, 791, 390, 30, 10]
+         }
+        ]
+      });
+
+      var echartBar = echarts.init(document.getElementById('echart_bar_horizontal'), theme);
+      echartBar.setOption({
+        title: {
+          text: 'Users Age',
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: "Save Image"
+            }
+          }
+        },
+        calculable: true,
+        xAxis: [{
+          type: 'value',
+          boundaryGap: [0, 0.01]
+        }],
+        yAxis: [{
+          type: 'category',
+          data: ['<20', '21-35', '36-40', '41-50', '>50']
+        }],
+        series: [{
+          type: 'bar',
+          data: [25, 60, 40, 20, 5]
+        }]
+      });
+
+      var echartDonut = echarts.init(document.getElementById('echart_donut'), theme);
+      echartDonut.setOption({
+        title: {
+          text: 'Users Gender',
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        calculable: true,
+        legend: {
+          x: 'center',
+          y: 'bottom',
+          data: ['Male', 'Female', 'Other']
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            magicType: {
+              show: true,
+              type: ['pie', 'funnel'],
+              option: {
+                funnel: {
+                  x: '25%',
+                  width: '50%',
+                  funnelAlign: 'center',
+                  max: 1548
+                }
+              }
+            },
+            restore: {
+              show: true,
+              title: "Restore"
+            },
+            saveAsImage: {
+              show: true,
+              title: "Save Image"
+            }
+          }
+        },
+        series: [{
+          name: 'Users',
+          type: 'pie',
+          radius: ['35%', '55%'],
+          itemStyle: {
+            normal: {
+              label: {
+                show: true
+              },
+              labelLine: {
+                show: true
+              }
+            },
+            emphasis: {
+              label: {
+                show: true,
+                position: 'center',
+                textStyle: {
+                  fontSize: '14',
+                  fontWeight: 'normal'
+                }
+              }
+            }
+          },
+          data: [{
+            value: 335,
+            name: 'Male'
+          }, {
+            value: 310,
+            name: 'Female'
+          }, {
+            value: 15,
+            name: 'Other'
+          }]
+        }]
+      });
+
+      window.onresize = function() {
+      	echartLine.resize();
+      	echartDonut.resize();
+      	echartBar.resize();
+      };
+		</script>
+
+</body>
 
 </html>

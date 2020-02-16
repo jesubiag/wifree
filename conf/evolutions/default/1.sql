@@ -38,7 +38,7 @@ create table analytics_query_filter (
   description                   varchar(255),
   time_period_type              varchar(8),
   time_period                   varchar(255),
-  gender                        integer,
+  gender                        varchar(9),
   age_range                     varchar(255),
   visits_amount                 varchar(255),
   visitor_address               varchar(255),
@@ -47,7 +47,7 @@ create table analytics_query_filter (
   when_created                  timestamp not null,
   when_modified                 timestamp not null,
   constraint ck_analytics_query_filter_time_period_type check ( time_period_type in ('ABSOLUTE','RELATIVE','ERROR','NONE')),
-  constraint ck_analytics_query_filter_gender check ( gender in (0,1,2,3,4)),
+  constraint ck_analytics_query_filter_gender check ( gender in ('Undefined','Male','Female','Error','Other')),
   constraint pk_analytics_query_filter primary key (id)
 );
 
@@ -60,11 +60,11 @@ create table network_user (
   last_connection               timestamp,
   online                        boolean default false not null,
   password                      varchar(255),
-  gender                        integer,
+  gender                        varchar(9),
   age                           integer not null,
   when_created                  timestamp not null,
   when_modified                 timestamp not null,
-  constraint ck_network_user_gender check ( gender in (0,1,2,3,4)),
+  constraint ck_network_user_gender check ( gender in ('Undefined','Male','Female','Error','Other')),
   constraint pk_network_user primary key (id)
 );
 

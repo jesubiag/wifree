@@ -51,7 +51,7 @@ case class DatasetFilter(portalId: Long,
 	
 	def expressions: BuiltExpressions = {
 		val portalExpression = Option(Expr.eq("portal.id", portalId))
-		val genderExpression = gender.map(g => Expr.ieq("networkUser.gender", g.toString))
+		val genderExpression = gender.map(g => Expr.eq("networkUser.gender", g.toString))
 		val ageExpression = age.map(a => a.expr("networkUser.age"))
 		val visitsAmountQuery = VisitsAmountQuery(visitsAmount.map { mm =>
 			Ebean.createSqlQuery("SELECT network_user_id"
@@ -98,13 +98,15 @@ object DatasetFilter {
 
 	def usersConnectedLastYearFilter(portalId: Long): DatasetFilter = relativeTimePeriodFilter(portalId, LAST_YEAR)
 
-	private def relativeTimePeriodFilter(portalId: Long, relativeTimePeriod: RelativeTimePeriod) = DatasetFilter(
+	def genderUsersConnectedLastYearFilter(portalId: Long, gender: Gender): DatasetFilter = relativeTimePeriodFilter(portalId, LAST_YEAR, Option(gender))
+
+	private def relativeTimePeriodFilter(portalId: Long, relativeTimePeriod: RelativeTimePeriod, gender: Option[Gender] = None) = DatasetFilter(
 		portalId = portalId,
 		name = "",
 		description = "",
 		timePeriod = relativeTimePeriod.toString,
 		timePeriodType = TimePeriodType.RELATIVE,
-		gender = None,
+		gender = gender,
 		age = None,
 		visitsAmount = None,
 		visitorAddress = None,

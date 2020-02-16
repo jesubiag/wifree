@@ -13,6 +13,10 @@ public class DateHelper {
 
 	// Public methods
 
+	public static DayOfWeek dayOfWeek(Instant date) {
+		return toLocalDate(date).getDayOfWeek();
+	}
+
 	public static int hourBeginning(Instant date) {
 		return date.atZone(zone).getHour();
 	}
@@ -62,8 +66,14 @@ public class DateHelper {
 		return Tuple2.apply(Instant.parse(splittedDatesStrings._1()), Instant.parse(splittedDatesStrings._2()));
 	}
 
+	/**
+	 *
+	 * @param latestDate
+	 * @param earlierDate
+	 * @return The seconds between latestDate and earlierDate
+	 */
 	public static long between(Instant latestDate, Instant earlierDate) {
-		return toLocalDateTime(latestDate).until(toLocalDateTime(earlierDate), ChronoUnit.SECONDS);
+		return toLocalDateTime(earlierDate).until(toLocalDateTime(latestDate), ChronoUnit.SECONDS);
 	}
 
 	// Private methods

@@ -1,9 +1,13 @@
 package operations.responses
 
-import operations.core.{ResponseType, WiFreeResponse}
-import java.util.{List => JList}
+import java.util.{List => JList, Map => JMap}
 
-case class GetAnalyticsDataResponse(visitsByMonth: JList[VisitsByPeriod]) extends WiFreeResponse {
+import operations.core.{ResponseType, WiFreeResponse}
+
+case class GetAnalyticsDataResponse(visitsByMonthLastYear: JList[VisitsByPeriod],
+                                    visitsByMonthLastYearByGender: VisitsByPeriodByGender,
+                                    visitsByDayByTimeRange: VisitsByDayByTimeRange,
+                                    visitsByDurationLastWeek: JMap[(Integer, Integer), JList[VisitsByPeriod]]) extends WiFreeResponse {
 
   override val success: Boolean = true
   override val errors: List[String] = Nil
@@ -15,3 +19,12 @@ case class GetAnalyticsDataResponse(visitsByMonth: JList[VisitsByPeriod]) extend
 }
 
 case class VisitsByPeriod(period: String, visits: Long)
+
+case class VisitsByPeriodByGender(male: JList[VisitsByPeriod], female: JList[VisitsByPeriod])
+
+case class VisitsByDayByTimeRange(visits0_8: JList[VisitsByPeriod],
+                                  visits8_11: JList[VisitsByPeriod],
+                                  visits11_13: JList[VisitsByPeriod],
+                                  visits13_16: JList[VisitsByPeriod],
+                                  visits16_20: JList[VisitsByPeriod],
+                                  visits20_24: JList[VisitsByPeriod])
