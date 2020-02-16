@@ -44,11 +44,8 @@ public class GetAnalyticsDataFunction
             List<NetworkUserConnectionLog> usersConnectedLastWeekLogs = dao.findForFilter(usersConnectedLastWeekFilter, now);
 
             List<VisitsByPeriod> visitsByMonth = visitsByMonth(usersConnectedLastYearLogs);
-
             VisitsByPeriodByGender visitsByMonthByGender = visitsByPeriodByGender(maleUsersConnectedLastYearLogs, femaleUsersConnectedLastYearLogs);
-
             VisitsByDayByTimeRange averageVisitsByDayByTimeRange = averageVisitsByDayByTimeRange(usersConnectedLastYearLogs);
-
             Map<Tuple2<Integer, Integer>, List<VisitsByPeriod>> visitsByDurationLastWeek = visitsByDurationLastWeek(usersConnectedLastWeekLogs);
 
             return new GetAnalyticsDataResponse(visitsByMonth,
@@ -59,37 +56,23 @@ public class GetAnalyticsDataFunction
         return function;
     }
 
-    private Map<Tuple2<Integer, Integer>, List<VisitsByPeriod>> visitsByDurationLastWeek(List<NetworkUserConnectionLog> usersConnectedLastWeekLogs) {
-        Map<Tuple2<Integer, Integer>, List<NetworkUserConnectionLog>> logsByTimeRanges =
-                groupMapping(
-                        usersConnectedLastWeekLogs,
-                        l -> toRange(MinutesRange.values, (int) (DateHelper.between(l.getConnectionEndDate(), l.getConnectionStartDate()) / 60)),
-                        l -> l
-                );
+    private List<VisitsByPeriod> visitsByMonth(List<NetworkUserConnectionLog> usersConnectedLastYearLogs) {
+        Map<String, Long> visitsByMonthMap = groupCounting(
+                usersConnectedLastYearLogs,
+                NetworkUserConnectionLog::getConnectionStartDate,
+                this::instantToYearMonth
+        );
+        ArrayList<String> months = new ArrayList<>(visitsByMonthMap.keySet());
+        months.sort(Comparator.naturalOrder());
+        return months.stream()
+                .map(month -> new VisitsByPeriod(month, visitsByMonthMap.get(month)))
+                .collect(Collectors.toList());
+    }
 
-        Map<Tuple2<Integer, Integer>, Map<String, List<NetworkUserConnectionLog>>> logsByDatesByTimeRanges = logsByTimeRanges.entrySet()
-                .stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> entry.getValue()
-                                .stream()
-                                .collect(Collectors.toMap(
-                                        l -> l.getConnectionStartDate().toString().split("T")[0].substring(0, 10),
-                                        l -> entry.getValue())
-                                )
-                        )
-                );
-        Map<Tuple2<Integer, Integer>, List<VisitsByPeriod>> visitsByDurationLastWeek = logsByDatesByTimeRanges.entrySet()
-                .stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> entry.getValue()
-                                .entrySet()
-                                .stream()
-                                .map(x -> new VisitsByPeriod(x.getKey(), x.getValue().size()))
-                                .collect(Collectors.toList())));
-
-        return visitsByDurationLastWeek;
+    private VisitsByPeriodByGender visitsByPeriodByGender(List<NetworkUserConnectionLog> maleUsersConnectedLastYearLogs, List<NetworkUserConnectionLog> femaleUsersConnectedLastYearLogs) {
+        List<VisitsByPeriod> maleVisitsByPeriod = visitsByMonth(maleUsersConnectedLastYearLogs);
+        List<VisitsByPeriod> femaleVisitsByPeriod = visitsByMonth(femaleUsersConnectedLastYearLogs);
+        return new VisitsByPeriodByGender(maleVisitsByPeriod, femaleVisitsByPeriod);
     }
 
     private VisitsByDayByTimeRange averageVisitsByDayByTimeRange(List<NetworkUserConnectionLog> usersConnectedLastYearLogs) {
@@ -112,9 +95,10 @@ public class GetAnalyticsDataFunction
         return dayAndRangeVisits.entrySet()
                 .stream()
                 .filter(entry -> entry.getKey().timeRange.equals(range))
-                .collect(Collectors.groupingBy(
-                        entry -> entry.getKey().dayOfWeek,
-                        Collectors.counting()
+                .collect(
+                        Collectors.groupingBy(
+                                entry -> entry.getKey().dayOfWeek,
+                                Collectors.counting()
                         )
                 )
                 .entrySet()
@@ -123,23 +107,49 @@ public class GetAnalyticsDataFunction
                 .collect(Collectors.toList());
     }
 
-    private VisitsByPeriodByGender visitsByPeriodByGender(List<NetworkUserConnectionLog> maleUsersConnectedLastYearLogs, List<NetworkUserConnectionLog> femaleUsersConnectedLastYearLogs) {
-        List<VisitsByPeriod> maleVisitsByPeriod = visitsByMonth(maleUsersConnectedLastYearLogs);
-        List<VisitsByPeriod> femaleVisitsByPeriod = visitsByMonth(femaleUsersConnectedLastYearLogs);
-        return new VisitsByPeriodByGender(maleVisitsByPeriod, femaleVisitsByPeriod);
+    private Map<Tuple2<Integer, Integer>, List<VisitsByPeriod>> visitsByDurationLastWeek(List<NetworkUserConnectionLog> usersConnectedLastWeekLogs) {
+        Map<Tuple2<Integer, Integer>, List<NetworkUserConnectionLog>> logsByTimeRanges =
+                groupMapping(
+                        usersConnectedLastWeekLogs,
+                        this::logToMinutesRange,
+                        l -> l
+                );
+
+        Map<Tuple2<Integer, Integer>, Map<String, List<NetworkUserConnectionLog>>> logsByDatesByTimeRanges = logsByTimeRanges.entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> entry.getValue()
+                                .stream()
+                                .collect(Collectors.toMap(
+                                        this::logToYearMonthDay,
+                                        l -> entry.getValue())
+                                )
+                        )
+                );
+        Map<Tuple2<Integer, Integer>, List<VisitsByPeriod>> visitsByDurationLastWeek = logsByDatesByTimeRanges.entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> entry.getValue()
+                                .entrySet()
+                                .stream()
+                                .map(x -> new VisitsByPeriod(x.getKey(), x.getValue().size()))
+                                .collect(Collectors.toList())));
+
+        return visitsByDurationLastWeek;
     }
 
-    private List<VisitsByPeriod> visitsByMonth(List<NetworkUserConnectionLog> usersConnectedLastYearLogs) {
-        Map<String, Long> visitsByMonthMap = groupCounting(
-                usersConnectedLastYearLogs,
-                NetworkUserConnectionLog::getConnectionStartDate,
-                x -> x.toString().split("T")[0].substring(0, 7)
-        );
-        ArrayList<String> months = new ArrayList<>(visitsByMonthMap.keySet());
-        months.sort(Comparator.naturalOrder());
-        return months.stream()
-                .map(month -> new VisitsByPeriod(month, visitsByMonthMap.get(month)))
-                .collect(Collectors.toList());
+    private String logToYearMonthDay(NetworkUserConnectionLog l) {
+        return l.getConnectionStartDate().toString().split("T")[0].substring(0, 10);
+    }
+
+    private Tuple2<Integer, Integer> logToMinutesRange(NetworkUserConnectionLog l) {
+        return toRange(MinutesRange.values, (int) (DateHelper.between(l.getConnectionEndDate(), l.getConnectionStartDate()) / 60));
+    }
+
+    private String instantToYearMonth(Instant date) {
+        return date.toString().split("T")[0].substring(0, 7);
     }
 
     @Override
