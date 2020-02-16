@@ -43,3 +43,6 @@ GET			/loginForm								controllers.LoginController.loginForm
 #POST		/admin									controllers.LoginController.loginAdmin
 
 # AdminAppController routes
+
+# API
+POST        /api/socialuser                         controllers.ApiController.socialUser

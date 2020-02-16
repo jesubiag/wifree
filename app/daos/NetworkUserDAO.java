@@ -1,5 +1,6 @@
 package daos;
 
+import io.ebean.Expr;
 import models.NetworkUser;
 
 /**
@@ -9,6 +10,10 @@ public class NetworkUserDAO extends GenericDAO<NetworkUser> {
 
 	public NetworkUserDAO() {
 		super(NetworkUser.class);
+	}
+
+	public NetworkUser findByEmail(String email) {
+		return find(Expr.eq("email", email));
 	}
 	
 }

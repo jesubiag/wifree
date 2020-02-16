@@ -76,6 +76,12 @@ public class DateHelper {
 		return toLocalDateTime(earlierDate).until(toLocalDateTime(latestDate), ChronoUnit.SECONDS);
 	}
 
+	public static long yearsBetween(Instant latestDate, Instant earlierDate) {
+		return toLocalDateTime(earlierDate).until(toLocalDateTime(latestDate), ChronoUnit.YEARS);
+	}
+
+
+
 	// Private methods
 
 	private static Instant processInstant(Function<LocalDate, LocalDate> f, Instant instant) {

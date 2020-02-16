@@ -62,7 +62,8 @@ public abstract class GenericDAO<T extends BaseModel> {
 	
 	public T find(Expression expression) {
 		logger.debug("Returning first object of type {} matching {}", ENTITY_TYPE, expression);
-		return listWhere(expression).get(0);
+		List<T> ts = listWhere(expression);
+		return ts.size() == 0 ? null : ts.get(0);
 	}
 	
 	public T getOrCreate(Long id) {
