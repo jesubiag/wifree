@@ -12,6 +12,8 @@ import org.pac4j.core.util.CommonHelper;
 
 public class WiFreeAdminAuthenticator implements Authenticator<UsernamePasswordCredentials> {
 
+	private final AdminDAO adminDAO = new AdminDAO();
+
 	@Override
 	public void validate(UsernamePasswordCredentials credentials, WebContext context) throws HttpAction, CredentialsException {
 		if (credentials == null) {
@@ -32,10 +34,11 @@ public class WiFreeAdminAuthenticator implements Authenticator<UsernamePasswordC
 			throwsException("Password for: '" + username + "' does not match input password");
 		}
 
-		// TODO: define appropiate profile
 		final CommonProfile profile = new CommonProfile();
+		Long userPortal = adminDAO.getPortalForUser(username);
 		profile.setId(username);
 		profile.addAttribute(Pac4jConstants.USERNAME, username);
+		profile.addAttribute("portal", userPortal);
 		credentials.setUserProfile(profile);
 	}
 
@@ -44,11 +47,6 @@ public class WiFreeAdminAuthenticator implements Authenticator<UsernamePasswordC
 	}
 
 	private String getPasswordFor(String username) {
-//		final AdminDAO adminDAO = new AdminDAO();
-//		return adminDAO.getPasswordForUser(username);
-		if ( CommonHelper.areEquals(username, "admin") )
-			return "pass";
-		else
-			return "___error";
+		return adminDAO.getPasswordForUser(username);
 	}
 }
