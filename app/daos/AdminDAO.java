@@ -1,6 +1,7 @@
 package daos;
 
 import io.ebean.Ebean;
+import io.ebean.Expr;
 import models.Admin;
 
 /**
@@ -23,12 +24,16 @@ public class AdminDAO extends GenericDAO<Admin> {
 
 	public Long getPortalForUser(String email) {
 		return Ebean.find(ENTITY_TYPE)
-				.select("portal_id")
+				.select("portal")
 				.where()
 				.eq("email", email)
 				.findOne()
 				.getPortal()
 				.getId();
+	}
+
+	public Admin getByEmail(String email) {
+		return find(Expr.eq("email", email));
 	}
 	
 }

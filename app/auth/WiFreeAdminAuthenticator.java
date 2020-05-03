@@ -1,6 +1,7 @@
 package auth;
 
 import daos.AdminDAO;
+import models.Admin;
 import org.pac4j.core.context.Pac4jConstants;
 import org.pac4j.core.context.WebContext;
 import org.pac4j.core.credentials.UsernamePasswordCredentials;
@@ -19,9 +20,9 @@ public class WiFreeAdminAuthenticator implements Authenticator<UsernamePasswordC
 		if (credentials == null) {
 			throwsException("No credential");
 		}
-		String username = credentials.getUsername();
+		String email = credentials.getUsername();
 		String password = credentials.getPassword();
-		if (CommonHelper.isBlank(username)) {
+		if (CommonHelper.isBlank(email)) {
 			throwsException("Username cannot be blank");
 		}
 		if (CommonHelper.isBlank(password)) {
@@ -29,16 +30,19 @@ public class WiFreeAdminAuthenticator implements Authenticator<UsernamePasswordC
 		}
 
 		// TODO: define appropiate validation method
-		String dbPassword = getPasswordFor(username);
+		String dbPassword = getPasswordFor(email);
 		if (CommonHelper.areNotEquals(password, dbPassword)) {
-			throwsException("Password for: '" + username + "' does not match input password");
+			throwsException("Password for: '" + email + "' does not match input password");
 		}
 
 		final CommonProfile profile = new CommonProfile();
-		Long userPortal = adminDAO.getPortalForUser(username);
-		profile.setId(username);
-		profile.addAttribute(Pac4jConstants.USERNAME, username);
+        Admin admin = adminDAO.getByEmail(email);
+        Long userPortal = admin.getPortal().getId();
+        String realName = admin.getName();
+		profile.setId(email);
+		profile.addAttribute(Pac4jConstants.USERNAME, email);
 		profile.addAttribute("portal", userPortal);
+        profile.addAttribute("realName", realName);
 		credentials.setUserProfile(profile);
 	}
 

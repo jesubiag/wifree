@@ -3,8 +3,27 @@
 @import org.pac4j.core.profile.CommonProfile
 @import java.util.{List => JList}
 
-@(profileList: JList[CommonProfile], graphicDataJson: JsValue ,graphicDataJson2: JsValue, graphicDataJson3: JsValue, graphicDataJson4: JsValue, graphicDataJson5: JsValue, graphicDataJson6: JsValue, graphicDataJson7: JsValue, graphicDataJson8: JsValue, graphicDataJson9: JsValue, graphicDataJson10: JsValue, graphicDataJson11: JsValue, graphicDataJson12: JsValue, graphicDataJson13: JsValue, graphicDataJson14: JsValue, graphicDataJson15: JsValue, graphicDataJson16: JsValue, graphicDataJson17: JsValue, graphicDataJson18: JsValue)
+@(profile: CommonProfile,
+graphicDataJson: JsValue,
+graphicDataJson2: JsValue,
+graphicDataJson3: JsValue,
+graphicDataJson4: JsValue,
+graphicDataJson5: JsValue,
+graphicDataJson6: JsValue,
+graphicDataJson7: JsValue,
+graphicDataJson8: JsValue,
+graphicDataJson9: JsValue,
+graphicDataJson10: JsValue,
+graphicDataJson11: JsValue,
+graphicDataJson12: JsValue,
+graphicDataJson13: JsValue,
+graphicDataJson14: JsValue,
+graphicDataJson15: JsValue,
+graphicDataJson16: JsValue,
+graphicDataJson17: JsValue,
+graphicDataJson18: JsValue)
 
+@username = @{profile.getAttribute("realName").toString()}
 @graphicData = @{graphicDataJson.toString()}
 @graphicData2 = @{graphicDataJson2.toString()}
 @graphicData3 = @{graphicDataJson3.toString()}
@@ -46,7 +65,7 @@
 				</div>
 				<div class="clearfix"></div>
 
-				@parts.menu_profile_quickinfo()
+				@parts.menu_profile_quickinfo(username)
 
 				<br />
 
@@ -56,7 +75,7 @@
 			</div>
 		</div>
 
-		@parts.top_navigation()
+		@parts.top_navigation(username)
 
 		<!-- Page content -->
 		<div class="right_col" role="main">

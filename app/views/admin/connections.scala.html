@@ -1,5 +1,7 @@
 @import views.dto.ConnectedUser
-@(networkConfigurationForm: Form[PortalNetworkConfiguration], connectedUsers: List[ConnectedUser])
+
+@(networkConfigurationForm: Form[PortalNetworkConfiguration],
+connectedUsers: List[ConnectedUser])
 
 <!DOCTYPE html>
 <html lang="es">
@@ -28,7 +30,7 @@
 						</div>
 						<div class="clearfix"></div>
 
-						@parts.menu_profile_quickinfo()
+						@parts.menu_profile_quickinfo("John Doe")
 
 						<br />
 
@@ -38,7 +40,7 @@
 					</div>
 				</div>
 
-				@parts.top_navigation()
+				@parts.top_navigation("John Doe")
 
 					<!-- page content -->
 				<div class="right_col" role="main">

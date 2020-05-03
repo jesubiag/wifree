@@ -1,5 +1,11 @@
 @import views.dto.ConnectedUser
-@(networkConfigurationForm: Form[PortalNetworkConfiguration], connectedUsers: List[ConnectedUser])
+@import org.pac4j.core.profile.CommonProfile
+
+@(networkConfigurationForm: Form[PortalNetworkConfiguration],
+connectedUsers: List[ConnectedUser],
+profile: CommonProfile)
+
+@username = @{profile.getAttribute("realName").toString()}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -28,7 +34,7 @@
 						</div>
 						<div class="clearfix"></div>
 
-						@parts.menu_profile_quickinfo()
+						@parts.menu_profile_quickinfo(username)
 
 						<br />
 
@@ -38,7 +44,7 @@
 					</div>
 				</div>
 
-				@parts.top_navigation()
+				@parts.top_navigation(username)
 
 				<!-- page content -->
 				<div class="right_col" role="main">

@@ -17,6 +17,7 @@ import services.ConnectionsService;
 import views.dto.ConnectedUser;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 /**
@@ -25,7 +26,7 @@ import java.util.concurrent.CompletionStage;
 public class AdminAppController extends WiFreeController {
 
 	@SubjectPresent(handlerKey = "FormClient", forceBeforeAuthCheck = true)
-	public Result dashboard() {
+	public Result dashboard() throws NoProfileFoundException {
 		final String genderGraphData = "[{\"name\": \"Direct Access\",\"value\": 335},{\"name\": \"E-mail Marketing\",\"value\": 310},{\"name\": \"Union Ad\",\"value\": 234},{\"name\": \"Video Ads\",\"value\": 135},{\"name\": \"Search Engine\",\"value\": 1548}]";
 		final JsValue jsGenderGraphData = Json.parse(genderGraphData);
 		final String ageGraphData = "[{\"name\": \"Direct Access\",\"value\": 335},{\"name\": \"E-mail Marketing\",\"value\": 310},{\"name\": \"Union Ad\",\"value\": 234},{\"name\": \"Video Ads\",\"value\": 135},{\"name\": \"Search Engine\",\"value\": 1548}]";
@@ -35,7 +36,7 @@ public class AdminAppController extends WiFreeController {
 		final String connectionsGraphDataLastWeek = "[{\"name\": \"Direct Access\",\"value\": 335},{\"name\": \"E-mail Marketing\",\"value\": 310},{\"name\": \"Union Ad\",\"value\": 234},{\"name\": \"Video Ads\",\"value\": 135},{\"name\": \"Search Engine\",\"value\": 1548}]";
 		final JsValue jsConnectionsGraphDataLastWeek = Json.parse(connectionsGraphDataLastWeek);
 		return ok(views.html.admin.dashboard.render(
-				getProfiles(),
+				getCurrentProfile(),
 				jsGenderGraphData,
 				jsAgeGraphData,
 				jsConnectionsGraphDataThisWeek,
@@ -44,7 +45,7 @@ public class AdminAppController extends WiFreeController {
 	}
 
 	@SubjectPresent(handlerKey = "FormClient", forceBeforeAuthCheck = true)
-	public Result analytics() {
+	public Result analytics() throws NoProfileFoundException {
 		/** Call something to get JSON
 		 * 1 - Search configured graphics for this portal
 		 * 2 - Return graphics:
@@ -131,25 +132,33 @@ public class AdminAppController extends WiFreeController {
 		final String json18 = "[{\"name\": \"Lunes\",\"value\": 364},{\"name\": \"Martes\",\"value\": 147},{\"name\": \"Miercoles\",\"value\": 264},{\"name\": \"Jueves\",\"value\": 164},{\"name\": \"Viernes\",\"value\": 361},{\"name\": \"Sabado\",\"value\": 265},{\"name\": \"Domingo\",\"value\": 423}]";
 		final JsValue jsValue18 = Json.parse(json18);
 
-		return ok(views.html.admin.analytics.render(getProfiles(), jsValue, jsValue2, jsValue3, jsValue4, jsValue5, jsValue6, jsValue7, jsValue8, jsValue9, jsValue10, jsValue11, jsValue12, jsValue13, jsValue14, jsValue15, jsValue16, jsValue17, jsValue18));
+		return ok(views.html.admin.analytics.render(getCurrentProfile(), jsValue, jsValue2, jsValue3, jsValue4, jsValue5, jsValue6, jsValue7, jsValue8, jsValue9, jsValue10, jsValue11, jsValue12, jsValue13, jsValue14, jsValue15, jsValue16, jsValue17, jsValue18));
 	}
 
 	@SubjectPresent(handlerKey = "FormClient", forceBeforeAuthCheck = true)
-	public Result connections() {
+	public Result connections() throws NoProfileFoundException {
 		final Form<PortalNetworkConfiguration> form = formFactory.form(PortalNetworkConfiguration.class);
 		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
 		final List<ConnectedUser> connectedUsers = ConnectionsService.connectedUsers( (Portal) playSessionStore.get(context, "portal"));
-		return ok(views.html.connections.index.render(form, connectedUsers));
+		CommonProfile currentProfile = getCurrentProfile();
+		return ok(views.html.connections.index.render(form, connectedUsers, currentProfile));
 	}
 
 	public Result portalSettings() {
 		return notFound();
 	}
 
-	private List<CommonProfile> getProfiles() {
+	private CommonProfile getCurrentProfile() throws NoProfileFoundException {
 		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
 		final ProfileManager<CommonProfile> profileManager = new ProfileManager(context);
-		return profileManager.getAll(true);
+		Optional<CommonProfile> currentProfile = profileManager.get(true);
+		return currentProfile.orElseThrow(() -> new NoProfileFoundException("No profile in current session logged in. There should be a profile in session at this point."));
+	}
+
+	private static class NoProfileFoundException extends Exception {
+		NoProfileFoundException(String msg) {
+			super(msg);
+		}
 	}
 
 }

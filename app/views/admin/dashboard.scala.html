@@ -1,10 +1,17 @@
 @import play.api.libs.json.JsValue
-@(profileList: java.util.List[org.pac4j.core.profile.CommonProfile], jsGenderGraphData: JsValue, jsAgeGraphData: JsValue, jsConnectionsGraphDataThisWeek: JsValue, jsConnectionsGraphDataLastWeek: JsValue)
+@import org.pac4j.core.profile.CommonProfile
+
+@(profile: CommonProfile,
+jsGenderGraphData: JsValue,
+jsAgeGraphData: JsValue,
+jsConnectionsGraphDataThisWeek: JsValue,
+jsConnectionsGraphDataLastWeek: JsValue)
 
 @genderGraphData = @{jsGenderGraphData.toString()}
 @ageGraphData = @{jsAgeGraphData.toString()}
 @connectionsGraphDataThisWeek = @{jsConnectionsGraphDataThisWeek.toString()}
 @connectionsGraphDataLastWeek = @{jsConnectionsGraphDataLastWeek.toString()}
+@username = @{profile.getAttribute("realName").toString()}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -27,7 +34,7 @@
 				</div>
 				<div class="clearfix"></div>
 
-				@parts.menu_profile_quickinfo()
+				@parts.menu_profile_quickinfo(username)
 
 				<br />
 
@@ -37,7 +44,7 @@
 			</div>
 		</div>
 
-		@parts.top_navigation()
+		@parts.top_navigation(username)
 
 		<!-- Page content -->
 		<div class="right_col" role="main">
