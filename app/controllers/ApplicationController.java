@@ -45,7 +45,7 @@ public class ApplicationController extends WiFreeController {
 		final Form<PortalNetworkConfiguration> form = formFactory.form(PortalNetworkConfiguration.class);
 		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
 		final List<ConnectedUser> connectedUsers = ConnectionsService.connectedUsers( (Portal) playSessionStore.get(context, "portal"));
-		return ok(views.html.admin.connections.render(form, connectedUsers));
+		return ok(views.html.testTheme.render(form, connectedUsers));
 	}
 
 }

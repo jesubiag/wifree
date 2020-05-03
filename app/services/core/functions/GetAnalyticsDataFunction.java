@@ -10,10 +10,7 @@ import utils.DateHelper;
 
 import java.time.DayOfWeek;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -103,6 +100,7 @@ public class GetAnalyticsDataFunction
                 )
                 .entrySet()
                 .stream()
+                .sorted(Comparator.comparing(Map.Entry::getKey))
                 .map(entry -> new VisitsByPeriod(entry.getKey().name(), entry.getValue()))
                 .collect(Collectors.toList());
     }
@@ -119,12 +117,9 @@ public class GetAnalyticsDataFunction
                 .stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        entry -> entry.getValue()
-                                .stream()
-                                .collect(Collectors.toMap(
-                                        this::logToYearMonthDay,
-                                        l -> entry.getValue())
-                                )
+                        entry -> groupMapping(entry.getValue(),
+                                this::logToYearMonthDay,
+                                l -> l)
                         )
                 );
         Map<Tuple2<Integer, Integer>, List<VisitsByPeriod>> visitsByDurationLastWeek = logsByDatesByTimeRanges.entrySet()
@@ -137,7 +132,30 @@ public class GetAnalyticsDataFunction
                                 .map(x -> new VisitsByPeriod(x.getKey(), x.getValue().size()))
                                 .collect(Collectors.toList())));
 
+        List<String> allPeriods = visitsByDurationLastWeek.values()
+                .stream()
+                .flatMap(Collection::stream)
+                .map(VisitsByPeriod::period)
+                .distinct()
+                .collect(Collectors.toList());
+
+       allPeriods.forEach(period -> {
+           for (Map.Entry<Tuple2<Integer, Integer>, List<VisitsByPeriod>> entry : visitsByDurationLastWeek.entrySet()) {
+               List<VisitsByPeriod> values = entry.getValue();
+               if (values.stream().noneMatch(v -> v.period().equals(period))) {
+                   values.add(new VisitsByPeriod(period, 0));
+               }
+               values.sort(Comparator.comparing(VisitsByPeriod::period));
+               entry.setValue(takeLastWeek(values));
+           }
+       });
+
         return visitsByDurationLastWeek;
+    }
+
+    private List<VisitsByPeriod> takeLastWeek(List<VisitsByPeriod> list) {
+        int size = list.size();
+        return list.subList(size - 7, size);
     }
 
     private String logToYearMonthDay(NetworkUserConnectionLog l) {

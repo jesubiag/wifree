@@ -5,8 +5,10 @@ import org.pac4j.play.store.PlaySessionStore;
 import play.Logger;
 import play.data.FormFactory;
 import play.mvc.Controller;
+import utils.DateHelper;
 
 import javax.inject.Inject;
+import java.time.Instant;
 
 public abstract class WiFreeController extends Controller {
 
@@ -20,5 +22,9 @@ public abstract class WiFreeController extends Controller {
 	protected PlaySessionStore playSessionStore;
 
 	protected final Logger.ALogger logger = Logger.of(this.getClass());
+
+	protected Instant now() {
+		return DateHelper.now();
+	}
 
 }

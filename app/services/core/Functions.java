@@ -23,6 +23,15 @@ public class Functions {
 	}
 	
 	public static <RQ extends WiFreeRequest> WiFreeFunction of(RQ request) {
+		if (allFunctions.isEmpty()) {
+			try {
+				initialize();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			}
+		}
 		return allFunctions.get(request.getClass());
 	}
 	

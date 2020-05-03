@@ -3,6 +3,8 @@ package operations.responses
 import java.util.{List => JList, Map => JMap}
 
 import operations.core.{ResponseType, WiFreeResponse}
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 case class GetAnalyticsDataResponse(visitsByMonthLastYear: JList[VisitsByPeriod],
                                     visitsByMonthLastYearByGender: VisitsByPeriodByGender,
@@ -19,6 +21,15 @@ case class GetAnalyticsDataResponse(visitsByMonthLastYear: JList[VisitsByPeriod]
 }
 
 case class VisitsByPeriod(period: String, visits: Long)
+
+object VisitsByPeriod {
+
+  implicit val writes: OWrites[VisitsByPeriod] = (
+    (JsPath \ "name").write[String] and
+      (JsPath \ "value").write[Long]
+    )(unlift(VisitsByPeriod.unapply))
+
+}
 
 case class VisitsByPeriodByGender(male: JList[VisitsByPeriod], female: JList[VisitsByPeriod])
 

@@ -24,7 +24,7 @@ public class PackageClassesFinder {
 
 	private static List<? extends Class<?>> of(String packageName) {
 		try {
-			final ImmutableSet<ClassPath.ClassInfo> classInfos = ClassPath.from(ClassLoader.getSystemClassLoader()).getTopLevelClasses(packageName);
+			final ImmutableSet<ClassPath.ClassInfo> classInfos = ClassPath.from(WiFreeFunction.class.getClassLoader()).getTopLevelClasses(packageName);
 			final List<? extends Class<?>> packageFunctionsClasses = classInfos.stream().map(x -> x.load()).collect(Collectors.toList());
 			return packageFunctionsClasses;
 		} catch (IOException e) {

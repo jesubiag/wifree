@@ -41,6 +41,10 @@ public class NetworkUserConnectionLog extends BaseModel {
 		return toLogString("id: " + id, "portal: " + portal, "networkUser: " + networkUser, "userDeviceMACAddress: " + userDeviceMACAddress);
 	}
 
+	@Override
+	public String toString() {
+		return "\nid: " + id + ", portal: " + portal.getId() + ", networkUSer: " + networkUser + ", start: " + connectionStartDate + ", end: " + connectionEndDate;
+	}
 
 	public Portal getPortal() {
 		return portal;
