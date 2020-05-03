@@ -7,6 +7,7 @@ import models.Portal;
 import org.pac4j.http.client.indirect.FormClient;
 import play.data.Form;
 import play.mvc.Result;
+import utils.MockupInitDataHelper;
 
 import java.util.List;
 
@@ -41,6 +42,11 @@ public class ConsoleController extends WiFreeController {
 		final Portal portal = portalForm.get();
 		portal.save();
 		return ok(views.html.console.created.render("*** Portal *** " + portal.toLogString() + " *** saved ***"));
+	}
+
+	public Result mockup(Long portalId) {
+		MockupInitDataHelper.run(portalId);
+		return ok("Mockups created");
 	}
 
 }

@@ -36,6 +36,7 @@ GET			/console								controllers.ConsoleController.index
 GET         /console/login      					controllers.ConsoleController.login
 POST		/console/create-admin					controllers.ConsoleController.createAdmin
 POST		/console/create-portal					controllers.ConsoleController.createPortal
+GET         /console/mockup/:portalId               controllers.ConsoleController.mockup(portalId: Long)
 
 # LoginController routes
 GET			/loginForm								controllers.LoginController.loginForm
