@@ -24,6 +24,7 @@ import utils.JsonHelper;
 import views.dto.ConnectedUser;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -173,12 +174,13 @@ public class AdminAppController extends WiFreeController {
 		JsValue visits16_20Json = JsonHelper.toJson(visits16_20);
 		JsValue visits20_24Json = JsonHelper.toJson(visits20_24);
 
+		List<VisitsByPeriod> emptyList = new ArrayList<>();
 		Map<Tuple2<Integer, Integer>, List<VisitsByPeriod>> visitsByDurationLastWeek = analyticsData.visitsByDurationLastWeek();
-		List<VisitsByPeriod> visits0to15 = visitsByDurationLastWeek.get(MinutesRange.RANGE_0_TO_15);
-		List<VisitsByPeriod> visits15to30 = visitsByDurationLastWeek.get(MinutesRange.RANGE_15_TO_30);
-		List<VisitsByPeriod> visits30to45 = visitsByDurationLastWeek.get(MinutesRange.RANGE_30_TO_45);
-		List<VisitsByPeriod> visits45to60 = visitsByDurationLastWeek.get(MinutesRange.RANGE_45_TO_60);
-		List<VisitsByPeriod> visits60toInf = visitsByDurationLastWeek.get(MinutesRange.RANGE_60_TO_INF);
+		List<VisitsByPeriod> visits0to15 = visitsByDurationLastWeek.getOrDefault(MinutesRange.RANGE_0_TO_15, emptyList);
+		List<VisitsByPeriod> visits15to30 = visitsByDurationLastWeek.getOrDefault(MinutesRange.RANGE_15_TO_30, emptyList);
+		List<VisitsByPeriod> visits30to45 = visitsByDurationLastWeek.getOrDefault(MinutesRange.RANGE_30_TO_45, emptyList);
+		List<VisitsByPeriod> visits45to60 = visitsByDurationLastWeek.getOrDefault(MinutesRange.RANGE_45_TO_60, emptyList);
+		List<VisitsByPeriod> visits60toInf = visitsByDurationLastWeek.getOrDefault(MinutesRange.RANGE_60_TO_INF, emptyList);
 		JsValue visits0to15Json = JsonHelper.toJson(takeLastWeek(visits0to15));
 		JsValue visits15to30Json = JsonHelper.toJson(takeLastWeek(visits15to30));
 		JsValue visits30to45Json = JsonHelper.toJson(takeLastWeek(visits30to45));
@@ -209,7 +211,7 @@ public class AdminAppController extends WiFreeController {
 
 	private List<VisitsByPeriod> takeLastWeek(List<VisitsByPeriod> list) {
 		int size = list.size();
-		return list.subList(size - 7, size);
+		return list.subList(size - Math.min(size, 7), size);
 	}
 
 	private CommonProfile getCurrentProfile() throws NoProfileFoundException {
