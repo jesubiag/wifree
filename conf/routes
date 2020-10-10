@@ -47,3 +47,4 @@ GET			/loginForm								controllers.LoginController.loginForm
 
 # API
 POST        /api/socialuser                         controllers.ApiController.socialUser
+POST        /api/survey                             controllers.ApiController.survey
