@@ -51,6 +51,16 @@ create table analytics_query_filter (
   constraint pk_analytics_query_filter primary key (id)
 );
 
+create table field (
+  id                            bigserial not null,
+  survey_id                     bigint not null,
+  type                          varchar(255),
+  config                        jsonb,
+  when_created                  timestamptz not null,
+  when_modified                 timestamptz not null,
+  constraint pk_field primary key (id)
+);
+
 create table network_user (
   id                            bigserial not null,
   portal_id                     bigint not null,
@@ -158,10 +168,22 @@ create table portal_network_configuration (
   constraint pk_portal_network_configuration primary key (id)
 );
 
+create table survey (
+  id                            bigserial not null,
+  portal_id                     bigint not null,
+  title                         varchar(255),
+  when_created                  timestamptz not null,
+  when_modified                 timestamptz not null,
+  constraint pk_survey primary key (id)
+);
+
 alter table address add constraint fk_address_owner_id foreign key (owner_id) references network_user (id) on delete restrict on update restrict;
 
 alter table analytics_query_filter add constraint fk_analytics_query_filter_portal_id foreign key (portal_id) references portal (id) on delete restrict on update restrict;
 create index ix_analytics_query_filter_portal_id on analytics_query_filter (portal_id);
+
+alter table field add constraint fk_field_survey_id foreign key (survey_id) references survey (id) on delete restrict on update restrict;
+create index ix_field_survey_id on field (survey_id);
 
 alter table network_user add constraint fk_network_user_portal_id foreign key (portal_id) references portal (id) on delete restrict on update restrict;
 create index ix_network_user_portal_id on network_user (portal_id);
@@ -188,6 +210,9 @@ create index ix_portal_app_portal_id on portal_app (portal_id);
 alter table portal_login_configuration add constraint fk_portal_login_configuration_portal_id foreign key (portal_id) references portal (id) on delete restrict on update restrict;
 create index ix_portal_login_configuration_portal_id on portal_login_configuration (portal_id);
 
+alter table survey add constraint fk_survey_portal_id foreign key (portal_id) references portal (id) on delete restrict on update restrict;
+create index ix_survey_portal_id on survey (portal_id);
+
 
 # --- !Downs
 
@@ -195,6 +220,9 @@ alter table if exists address drop constraint if exists fk_address_owner_id;
 
 alter table if exists analytics_query_filter drop constraint if exists fk_analytics_query_filter_portal_id;
 drop index if exists ix_analytics_query_filter_portal_id;
+
+alter table if exists field drop constraint if exists fk_field_survey_id;
+drop index if exists ix_field_survey_id;
 
 alter table if exists network_user drop constraint if exists fk_network_user_portal_id;
 drop index if exists ix_network_user_portal_id;
@@ -221,11 +249,16 @@ drop index if exists ix_portal_app_portal_id;
 alter table if exists portal_login_configuration drop constraint if exists fk_portal_login_configuration_portal_id;
 drop index if exists ix_portal_login_configuration_portal_id;
 
+alter table if exists survey drop constraint if exists fk_survey_portal_id;
+drop index if exists ix_survey_portal_id;
+
 drop table if exists address cascade;
 
 drop table if exists admin cascade;
 
 drop table if exists analytics_query_filter cascade;
+
+drop table if exists field cascade;
 
 drop table if exists network_user cascade;
 
@@ -242,4 +275,6 @@ drop table if exists portal_app cascade;
 drop table if exists portal_login_configuration cascade;
 
 drop table if exists portal_network_configuration cascade;
+
+drop table if exists survey cascade;
 

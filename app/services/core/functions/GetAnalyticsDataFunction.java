@@ -155,7 +155,7 @@ public class GetAnalyticsDataFunction
 
     private List<VisitsByPeriod> takeLastWeek(List<VisitsByPeriod> list) {
         int size = list.size();
-        return list.subList(size - 7, size);
+        return list.subList(Math.max(size - 7, 0), size);
     }
 
     private String logToYearMonthDay(NetworkUserConnectionLog l) {

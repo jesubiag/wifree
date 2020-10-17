@@ -2,20 +2,32 @@ package controllers.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import controllers.WiFreeController;
-import controllers.dtos.*;
+import daos.PortalDAO;
+import models.*;
+import operations.requests.CreateSurveyRequest;
+import operations.responses.CreateSurveyResponse;
 import play.mvc.Result;
+import services.SurveysService;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class SurveyController extends WiFreeController {
 
+    @Inject
+    private SurveysService surveysService;
+
+    @Inject
+    private PortalDAO portalDAO;
+
     public Result survey() {
         JsonNode bodyJson = request().body().asJson();
 
         final long id = bodyJson.findValue("id").asLong();
         final long portalId = bodyJson.findValue("portalId").asLong();
+        final Portal portal = portalDAO.get(portalId);
         final String title = bodyJson.findValue("title").asText();
         List<Field> fields = new ArrayList<>();
 
@@ -23,11 +35,13 @@ public class SurveyController extends WiFreeController {
                 .elements()
                 .forEachRemaining(fieldNode -> createField(fields, fieldNode));
 
-        final Survey survey = new Survey(id, portalId, title, fields);
+        final Survey survey = new Survey(id, portal, title, fields);
+        survey.getFields().forEach(field -> field.setSurvey(survey));
 
         // TODO guardar survey, crear dao
+        CreateSurveyResponse createSurveyResponse = surveysService.createSurvey(new CreateSurveyRequest(survey));
 
-        return ok();
+        return ok(createSurveyResponse.isOk() + "");
     }
 
     private void createField(List<Field> fields, JsonNode field) {

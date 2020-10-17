@@ -1,9 +1,9 @@
-package controllers.dtos;
+package models;
 
 public class TextboxFieldConfig extends FieldConfig {
 
-    private final Boolean required;
-    private final String value;
+    private Boolean required;
+    private String value;
 
     public TextboxFieldConfig(String key, String label, Boolean required, Integer order, String value) {
         super(key, label, order);
@@ -14,5 +14,21 @@ public class TextboxFieldConfig extends FieldConfig {
     @Override
     public SurveyAnswer getAnswer() {
         return null; // TODO Algo con required y order
+    }
+
+    public Boolean getRequired() {
+        return required;
+    }
+
+    public void setRequired(Boolean required) {
+        this.required = required;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

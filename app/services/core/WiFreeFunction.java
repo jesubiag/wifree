@@ -8,7 +8,6 @@ import java.util.function.Function;
 
 public abstract class WiFreeFunction<RQ extends WiFreeRequest, RS extends WiFreeResponse> {
 
-	
 	protected Function<RQ, RS> function;
 	
 	public abstract Function<RQ, RS> function();

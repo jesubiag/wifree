@@ -1,7 +1,7 @@
-package controllers.dtos;
+package models;
 
 public class RatingFieldConfig extends FieldConfig {
-    private final Integer maximum;
+    private Integer maximum;
 
     public RatingFieldConfig(String key, String label, Integer order, Integer maximum) {
         super(key, label, order);
@@ -11,5 +11,13 @@ public class RatingFieldConfig extends FieldConfig {
     @Override
     public SurveyAnswer getAnswer() {
         return null; // TODO algo con maximum
+    }
+
+    public Integer getMaximum() {
+        return maximum;
+    }
+
+    public void setMaximum(Integer maximum) {
+        this.maximum = maximum;
     }
 }
