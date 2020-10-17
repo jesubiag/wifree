@@ -16,5 +16,3 @@ public class Survey {
     }
 }
 
-abstract class SurveyAnswer {}
-
