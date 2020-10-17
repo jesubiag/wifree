@@ -10,16 +10,20 @@ import play.data.Form;
 import play.mvc.Result;
 import services.AnalyticsService;
 
+import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
 public class AnalyticsController extends WiFreeController {
+
+	@Inject
+	private AnalyticsService analyticsService;
 	
 	public CompletionStage<Result> createAnalyticsQuery() {
 		final Form<AnalyticsQueryFilter> form = formFactory.form(AnalyticsQueryFilter.class);
 		AnalyticsQueryFilter queryFilter = form.bindFromRequest().get();
 		
 		final CreateAnalyticsQueryFilterRequest request = new CreateAnalyticsQueryFilterRequest(queryFilter);
-		final CompletionStage<CreateAnalyticsQueryFilterResponse> futureResponse = AnalyticsService.createAnalyticsQueryFilter(request);
+		final CompletionStage<CreateAnalyticsQueryFilterResponse> futureResponse = analyticsService.createAnalyticsQueryFilter(request);
 		
 		// TODO revisar
 		return futureResponse.thenApplyAsync(response -> {
@@ -33,7 +37,7 @@ public class AnalyticsController extends WiFreeController {
 		final AnalyticsQueryFilter queryFilter = form.bindFromRequest().get();
 		
 		final RunAnalyticsQueryFilterRequest request = new RunAnalyticsQueryFilterRequest(queryFilter);
-		final CompletionStage<RunAnalyticsQueryFilterResponse> futureResponse = AnalyticsService.runAnalyticsQueryFilter(request);
+		final CompletionStage<RunAnalyticsQueryFilterResponse> futureResponse = analyticsService.runAnalyticsQueryFilter(request);
 		
 		futureResponse.thenApplyAsync(response -> {
 			if (response.isOk()) return ok();

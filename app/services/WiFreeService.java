@@ -15,6 +15,10 @@ public abstract class WiFreeService {
 		final WiFreeFunction function = getFunction(request);
 		return function.apply(request);
 	}
+
+	protected <RQ extends WiFreeRequest, RS extends WiFreeResponse> RS processRequest(RQ request) {
+		return (RS) process(request);
+	}
 	
 	private static <T extends WiFreeRequest> WiFreeFunction getFunction(T request) {
 		return Functions.of(request);
