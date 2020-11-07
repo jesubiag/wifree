@@ -86,4 +86,8 @@ public class PortalLoginConfiguration extends BaseModel {
 	public void setRedirectURL(String redirectURL) {
 		this.redirectURL = redirectURL;
 	}
+
+	public boolean hasSocialLoginEnabled() {
+		return isSocialLogin && enabled;
+	}
 }

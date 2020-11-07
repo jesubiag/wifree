@@ -2,6 +2,7 @@ package controllers.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import controllers.WiFreeController;
+import controllers.api.dto.NetworkUserDTO;
 import daos.NetworkUserDAO;
 import daos.PortalDAO;
 import models.NetworkUser;
@@ -10,11 +11,23 @@ import models.types.Gender;
 import play.mvc.Result;
 import utils.DateHelper;
 
+import javax.inject.Inject;
 import java.time.Instant;
+
+import static java.util.Optional.ofNullable;
 
 public class SocialUserController extends WiFreeController {
 
-    public Result socialUser() {
+    @Inject
+    private NetworkUserDAO networkUserDAO;
+
+    public Result getSocialUser(String email) {
+        return ofNullable(networkUserDAO.findByEmail(email))
+                .map(networkUser -> ok(NetworkUserDTO.json(networkUser)))
+                .orElse(badRequest("User [" + email + "] not found."));
+    }
+
+    public Result saveSocialUser() {
         JsonNode bodyJson = request().body().asJson();
 
         JsonNode names = bodyJson.withArray("names");

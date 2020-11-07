@@ -152,7 +152,7 @@ create table portal_login_configuration (
   redirect_url                  varchar(255),
   when_created                  timestamptz not null,
   when_modified                 timestamptz not null,
-  constraint ck_portal_login_configuration_login_method check ( login_method in (0,1,2)),
+  constraint ck_portal_login_configuration_login_method check ( login_method in (0,1,2,3,4,5)),
   constraint uq_portal_login_configuration_portal_id_login_method unique (portal_id,login_method),
   constraint pk_portal_login_configuration primary key (id)
 );
@@ -164,7 +164,7 @@ create table portal_network_configuration (
   enable_bans                   boolean default false not null,
   when_created                  timestamptz not null,
   when_modified                 timestamptz not null,
-  constraint ck_portal_network_configuration_login_method check ( login_method in (0,1,2)),
+  constraint ck_portal_network_configuration_login_method check ( login_method in (0,1,2,3,4,5)),
   constraint pk_portal_network_configuration primary key (id)
 );
 
@@ -172,6 +172,7 @@ create table survey (
   id                            bigserial not null,
   portal_id                     bigint not null,
   title                         varchar(255),
+  enabled                       boolean default false not null,
   when_created                  timestamptz not null,
   when_modified                 timestamptz not null,
   constraint pk_survey primary key (id)

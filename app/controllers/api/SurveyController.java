@@ -22,7 +22,8 @@ public class SurveyController extends WiFreeController {
     @Inject
     private PortalDAO portalDAO;
 
-    public Result survey() {
+    // TODO no se que es esto, revisar
+    public Result saveSurvey() {
         JsonNode bodyJson = request().body().asJson();
 
         final long id = bodyJson.findValue("id").asLong();
@@ -35,7 +36,7 @@ public class SurveyController extends WiFreeController {
                 .elements()
                 .forEachRemaining(fieldNode -> createField(fields, fieldNode));
 
-        final Survey survey = new Survey(id, portal, title, fields);
+        final Survey survey = new Survey(id, portal, title, fields, true);
         survey.getFields().forEach(field -> field.setSurvey(survey));
 
         // TODO guardar survey, crear dao

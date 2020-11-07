@@ -14,14 +14,17 @@ public class Survey extends BaseModel {
 
     private String title;
 
+    private boolean enabled;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "survey")
     private List<Field> fields;
 
-    public Survey(Long id, Portal portal, String title, List<Field> fields) {
+    public Survey(Long id, Portal portal, String title, List<Field> fields, boolean enabled) {
         this.id = id;
         this.portal = portal;
         this.title = title;
         this.fields = fields;
+        this.enabled = enabled;
     }
 
     @Override
@@ -51,6 +54,14 @@ public class Survey extends BaseModel {
 
     public void setPortal(Portal portal) {
         this.portal = portal;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
 

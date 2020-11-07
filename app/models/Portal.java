@@ -151,4 +151,12 @@ public class Portal extends BaseModel {
 		this.instagramURL = instagramURL;
 	}
 
+	public Set<PortalLoginConfiguration> getLoginConfigurations() {
+		return loginConfigurations;
+	}
+
+	public boolean hasSocialLoginEnabled() {
+		return loginConfigurations.stream()
+				.anyMatch(PortalLoginConfiguration::hasSocialLoginEnabled);
+	}
 }

@@ -5,8 +5,11 @@ package models.types;
  */
 public enum LoginMethodType {
 
-	EmaillAndPassword,
+	Google,
+	Facebook,
+	Twitter,
+	EmailAndPassword,
 	SocialLogin,
-	Voucher
+	Survey
 
 }
