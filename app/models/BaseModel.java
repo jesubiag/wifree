@@ -25,6 +25,13 @@ public abstract class BaseModel extends Model implements Serializable, WiFreeEnt
 	@WhenModified
 	protected Timestamp whenModified;
 
+	public Long getId() {
+		return id;
+	}
+
+	protected void setId(Long id) {
+		this.id = id;
+	}
 
 	protected String toLogString(String... attributes) {
 		String logString = "";
@@ -38,15 +45,6 @@ public abstract class BaseModel extends Model implements Serializable, WiFreeEnt
 	}
 
 	public abstract String toLogString();
-
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Timestamp getWhenCreated() {
 		return whenCreated;
@@ -63,4 +61,5 @@ public abstract class BaseModel extends Model implements Serializable, WiFreeEnt
 	public void setWhenModified(Timestamp whenModified) {
 		this.whenModified = whenModified;
 	}
+
 }

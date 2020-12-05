@@ -1,6 +1,5 @@
 package controllers;
 
-import models.Portal;
 import models.PortalNetworkConfiguration;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.context.Pac4jConstants;
@@ -25,6 +24,9 @@ public class ApplicationController extends WiFreeController {
 	@Inject
 	private PlaySessionStore playSessionStore;
 
+	@Inject
+	private ConnectionsService connectionsService;
+
 	private List<CommonProfile> getProfiles() {
 		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
 		final ProfileManager<CommonProfile> profileManager = new ProfileManager(context);
@@ -43,8 +45,7 @@ public class ApplicationController extends WiFreeController {
 
 	public Result testTheme() {
 		final Form<PortalNetworkConfiguration> form = formFactory.form(PortalNetworkConfiguration.class);
-		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
-		final List<ConnectedUser> connectedUsers = ConnectionsService.connectedUsers( (Portal) playSessionStore.get(context, "portal"));
+		final List<ConnectedUser> connectedUsers = connectionsService.connectedUsers();
 		return ok(views.html.testTheme.render(form, connectedUsers));
 	}
 

@@ -1,7 +1,6 @@
 package controllers;
 
 import be.objectify.deadbolt.java.actions.SubjectPresent;
-import models.Portal;
 import models.PortalNetworkConfiguration;
 import operations.requests.GetAnalyticsDataRequest;
 import operations.responses.GetAnalyticsDataResponse;
@@ -9,8 +8,6 @@ import operations.responses.VisitsByDayByTimeRange;
 import operations.responses.VisitsByPeriod;
 import operations.responses.VisitsByPeriodByGender;
 import org.pac4j.core.profile.CommonProfile;
-import org.pac4j.core.profile.ProfileManager;
-import org.pac4j.play.PlayWebContext;
 import play.api.libs.json.JsValue;
 import play.api.libs.json.Json;
 import play.data.Form;
@@ -27,7 +24,6 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Created by jesu on 27/06/17.
@@ -36,6 +32,9 @@ public class AdminAppController extends WiFreeController {
 
 	@Inject
 	AnalyticsService analyticsService;
+
+	@Inject
+	ConnectionsService connectionsService;
 
 	@SubjectPresent(handlerKey = "FormClient", forceBeforeAuthCheck = true)
 	public Result dashboard() throws NoProfileFoundException {
@@ -145,7 +144,7 @@ public class AdminAppController extends WiFreeController {
 		final JsValue jsValue18 = Json.parse(json18);
 
 		CommonProfile currentProfile = getCurrentProfile();
-		Long portalId = (Long) currentProfile.getAttribute("portal");
+		Long portalId = portalId();
 
 		GetAnalyticsDataRequest analyticsRequest = new GetAnalyticsDataRequest(portalId, DateHelper.now());
 
@@ -198,10 +197,12 @@ public class AdminAppController extends WiFreeController {
 
 	@SubjectPresent(handlerKey = "FormClient", forceBeforeAuthCheck = true)
 	public Result connections() throws NoProfileFoundException {
-		final Form<PortalNetworkConfiguration> form = formFactory.form(PortalNetworkConfiguration.class);
-		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
-		final List<ConnectedUser> connectedUsers = ConnectionsService.connectedUsers( (Portal) playSessionStore.get(context, "portal"));
+		PortalNetworkConfiguration portalNetworkConfiguration = connectionsService.networkConfiguration(portalId());
+		Form<PortalNetworkConfiguration> form = portalNetworkConfiguration == null
+				? formFactory.form(PortalNetworkConfiguration.class)
+				: formFactory.form(PortalNetworkConfiguration.class).fill(portalNetworkConfiguration);
 		CommonProfile currentProfile = getCurrentProfile();
+		ArrayList<ConnectedUser> connectedUsers = connectionsService.connectedUsers();
 		return ok(views.html.admin.connections.render(form, connectedUsers, currentProfile));
 	}
 
@@ -212,19 +213,6 @@ public class AdminAppController extends WiFreeController {
 	private List<VisitsByPeriod> takeLastWeek(List<VisitsByPeriod> list) {
 		int size = list.size();
 		return list.subList(size - Math.min(size, 7), size);
-	}
-
-	private CommonProfile getCurrentProfile() throws NoProfileFoundException {
-		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
-		final ProfileManager<CommonProfile> profileManager = new ProfileManager(context);
-		Optional<CommonProfile> currentProfile = profileManager.get(true);
-		return currentProfile.orElseThrow(() -> new NoProfileFoundException("No profile in current session logged in. There should be a profile in session at this point."));
-	}
-
-	private static class NoProfileFoundException extends Exception {
-		NoProfileFoundException(String msg) {
-			super(msg);
-		}
 	}
 
 }

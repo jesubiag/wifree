@@ -1,7 +1,5 @@
 package models;
 
-import io.ebean.annotation.Aggregation;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.time.Instant;

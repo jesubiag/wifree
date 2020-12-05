@@ -159,4 +159,12 @@ public class Portal extends BaseModel {
 		return loginConfigurations.stream()
 				.anyMatch(PortalLoginConfiguration::hasSocialLoginEnabled);
 	}
+
+	public void setNetworkConfiguration(PortalNetworkConfiguration networkConfiguration) {
+		this.networkConfiguration = networkConfiguration;
+	}
+
+	public PortalNetworkConfiguration getNetworkConfiguration() {
+		return networkConfiguration;
+	}
 }

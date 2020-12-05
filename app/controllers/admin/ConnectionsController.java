@@ -1,8 +1,7 @@
 package controllers.admin;
 
-import controllers.routes;
-import core.constants.ConnectionsConstants;
 import controllers.WiFreeController;
+import core.constants.ConnectionsConstants;
 import models.PortalNetworkConfiguration;
 import play.data.Form;
 import play.mvc.Result;
@@ -18,9 +17,8 @@ public class ConnectionsController extends WiFreeController implements Connectio
 	public Result setConnectionTimeout() {
 		final Form<PortalNetworkConfiguration> form = formFactory.form(PortalNetworkConfiguration.class);
 		final PortalNetworkConfiguration portalNetworkConfiguration = form.bindFromRequest().get();
-		ConnectionsService.saveConnectionTimeout(portalNetworkConfiguration);
+		connectionsService.saveConnectionTimeout(portalNetworkConfiguration.getConnectionTimeout(), portalId());
 		return redirect(controllers.routes.AdminAppController.connections()); // with something
 	}
-
 
 }

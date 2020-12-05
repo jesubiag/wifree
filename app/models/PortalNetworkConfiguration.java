@@ -11,21 +11,23 @@ import javax.persistence.OneToOne;
 @Entity
 public class PortalNetworkConfiguration extends BaseModel {
 
+	@OneToOne(mappedBy = "networkConfiguration")
+	private Portal portal;
+
 	private Integer connectionTimeout;
 
 	private LoginMethodType loginMethod;
 
 	private boolean enableBans;
 
-	@OneToOne(mappedBy = "networkConfiguration")
-	private Portal portal;
+	public PortalNetworkConfiguration() {}
 
-
-	public PortalNetworkConfiguration() {
+	public PortalNetworkConfiguration(Portal portal) {
+		setPortal(portal);
 	}
-	
-	public PortalNetworkConfiguration(Long id) {
-		this.id = id;
+
+	public PortalNetworkConfiguration(Long portalId) {
+		setId(portalId);
 	}
 
 	public PortalNetworkConfiguration(Integer connectionTimeout, LoginMethodType loginMethod, boolean enableBans) {
@@ -34,12 +36,19 @@ public class PortalNetworkConfiguration extends BaseModel {
 		this.enableBans = enableBans;
 	}
 
+	public boolean hasPortal() {
+		return portal == null;
+	}
+
+	@Override
+	public Long getId() {
+		return portal.id;
+	}
 
 	@Override
 	public String toLogString() {
-		return toLogString("id: " + id, "connectionTimeout: " + connectionTimeout, "loginMethod: " + loginMethod, "enableBans: " + enableBans);
+		return toLogString("id: " + portal.getId(), "connectionTimeout: " + connectionTimeout, "loginMethod: " + loginMethod, "enableBans: " + enableBans);
 	}
-
 
 	public Integer getConnectionTimeout() {
 		return connectionTimeout;
@@ -63,5 +72,14 @@ public class PortalNetworkConfiguration extends BaseModel {
 
 	public void setEnableBans(boolean enableBans) {
 		this.enableBans = enableBans;
+	}
+
+	public void setPortal(Portal portal) {
+		this.portal = portal;
+		setId(portal.id);
+	}
+
+	public Portal getPortal() {
+		return portal;
 	}
 }

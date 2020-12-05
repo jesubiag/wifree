@@ -6,10 +6,9 @@ import io.ebean.Expression;
 import models.BaseModel;
 import play.Logger;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -59,7 +58,8 @@ public abstract class GenericDAO<T extends BaseModel> {
 		logger.debug("Returning all objects type {} matching {}", ENTITY_TYPE, expression);
 		return Ebean.find(ENTITY_TYPE).where(expression).findList();
 	}
-	
+
+	@Nullable
 	public T find(Expression expression) {
 		logger.debug("Returning first object of type {} matching {}", ENTITY_TYPE, expression);
 		List<T> ts = listWhere(expression);
@@ -85,7 +85,6 @@ public abstract class GenericDAO<T extends BaseModel> {
 		final Constructor<T> idConstructor = ENTITY_TYPE.getConstructor(Long.class);
 		return idConstructor.newInstance(id);
 	}
-
 
 	public EbeanServer getServer() {
 		return server;

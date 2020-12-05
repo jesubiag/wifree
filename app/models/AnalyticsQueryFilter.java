@@ -1,7 +1,6 @@
 package models;
 
 import io.ebean.annotation.DbArray;
-import io.ebean.annotation.DbEnumValue;
 import models.types.DayOfTheWeek;
 import models.types.Gender;
 import models.types.TimePeriodType;
