@@ -4,6 +4,7 @@ import daos.PortalDAO;
 import daos.PortalNetworkConfigurationDAO;
 import models.Portal;
 import models.PortalNetworkConfiguration;
+import models.types.LoginMethodType;
 import views.dto.ConnectedUser;
 import views.dto.ConnectionsPage;
 
@@ -20,13 +21,14 @@ public class ConnectionsService {
 	@Inject
 	PortalDAO portalDAO;
 	
-	public void saveConnectionTimeout(Integer connectionTimeout, Long portalId) {
+	public void saveNetworkConfiguration(Integer connectionTimeout, LoginMethodType loginMethod, Long portalId) {
 		Portal portal = portalDAO.get(portalId);
 		PortalNetworkConfiguration networkConfiguration = portal.getNetworkConfiguration();
 		if (networkConfiguration == null) {
 			networkConfiguration = new PortalNetworkConfiguration(portal);
 		}
 		networkConfiguration.setConnectionTimeout(connectionTimeout);
+		networkConfiguration.setLoginMethod(loginMethod);
 		portal.setNetworkConfiguration(networkConfiguration);
 		portalNetworkConfigurationDAO.save(networkConfiguration);
 		portalDAO.save(portal);

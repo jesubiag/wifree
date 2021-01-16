@@ -10,11 +10,6 @@ public class RadioFieldConfig extends FieldConfig {
         this.options = options;
     }
 
-    @Override
-    public SurveyAnswer getAnswer() {
-        return null; // TODO algo con options
-    }
-
     public List<Option> getOptions() {
         return options;
     }

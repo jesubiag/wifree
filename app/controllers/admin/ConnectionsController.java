@@ -17,7 +17,7 @@ public class ConnectionsController extends WiFreeController implements Connectio
 	public Result setConnectionTimeout() {
 		final Form<PortalNetworkConfiguration> form = formFactory.form(PortalNetworkConfiguration.class);
 		final PortalNetworkConfiguration portalNetworkConfiguration = form.bindFromRequest().get();
-		connectionsService.saveConnectionTimeout(portalNetworkConfiguration.getConnectionTimeout(), portalId());
+		connectionsService.saveNetworkConfiguration(portalNetworkConfiguration.getConnectionTimeout(), portalNetworkConfiguration.getLoginMethod(), portalId());
 		return redirect(controllers.routes.AdminAppController.connections()); // with something
 	}
 

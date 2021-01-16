@@ -1,5 +1,6 @@
 @import views.dto.ConnectedUser
 @import org.pac4j.core.profile.CommonProfile
+@import models.types.LoginMethodType
 
 @(networkConfigurationForm: Form[PortalNetworkConfiguration],
 	connectedUsers: List[ConnectedUser],
@@ -54,9 +55,16 @@
 								</div>
 								<div class="x-content">
 									@helper.form(controllers.admin.routes.ConnectionsController.setConnectionTimeout(), 'id -> "connectionTimeoutForm", Symbol("data-parsley-validate") -> "true", 'class -> "form-horizontal form-label-left") {
-										<div class="form-group">
+										<div class="form-group row">
 											<div class="col-md-3 col-sm-3 col-xs-6">
 												@helper.inputText(networkConfigurationForm("connectionTimeout"), '_label -> Messages("connections.label.max-timeout"), 'type -> "number", 'required -> "required", 'class -> "form-control col-md-7 col-xs-12", 'min -> "1")
+											</div>
+										</div>
+										<div class="form-group row">
+											<div class="col-md-3 col-sm-3 col-xs-6">
+												<div class="radio">
+													@helper.inputRadioGroup(networkConfigurationForm("loginMethod"), LoginMethodType.portalLoginTypes(), '_label -> Messages("connections.label.login-method"), 'required -> "required", 'class -> "")
+												</div>
 											</div>
 										</div>
 										<div class="ln_solid"></div>

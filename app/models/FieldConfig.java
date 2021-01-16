@@ -1,7 +1,5 @@
 package models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public abstract class FieldConfig {
 
     protected String key;
@@ -38,6 +36,4 @@ public abstract class FieldConfig {
         this.order = order;
     }
 
-    @JsonIgnore
-    abstract public SurveyAnswer getAnswer();
 }

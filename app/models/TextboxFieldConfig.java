@@ -11,11 +11,6 @@ public class TextboxFieldConfig extends FieldConfig {
         this.value = value;
     }
 
-    @Override
-    public SurveyAnswer getAnswer() {
-        return null; // TODO Algo con required y order
-    }
-
     public Boolean getRequired() {
         return required;
     }

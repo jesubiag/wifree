@@ -8,11 +8,6 @@ public class RatingFieldConfig extends FieldConfig {
         this.maximum = maximum;
     }
 
-    @Override
-    public SurveyAnswer getAnswer() {
-        return null; // TODO algo con maximum
-    }
-
     public Integer getMaximum() {
         return maximum;
     }
