@@ -2,6 +2,7 @@ package controllers;
 
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 import models.PortalNetworkConfiguration;
+import models.Survey;
 import operations.requests.GetAnalyticsDataRequest;
 import operations.responses.GetAnalyticsDataResponse;
 import operations.responses.VisitsByDayByTimeRange;
@@ -204,6 +205,13 @@ public class AdminAppController extends WiFreeController {
 		CommonProfile currentProfile = getCurrentProfile();
 		ArrayList<ConnectedUser> connectedUsers = connectionsService.connectedUsers();
 		return ok(views.html.admin.connections.render(form, connectedUsers, currentProfile));
+	}
+
+	@SubjectPresent(handlerKey = "FormClient", forceBeforeAuthCheck = true)
+	public Result surveys() throws NoProfileFoundException {
+		CommonProfile currentProfile = getCurrentProfile();
+		Form<Survey> form = formFactory.form(Survey.class);
+		return ok(views.html.admin.surveys.render(currentProfile, form));
 	}
 
 	public Result portalSettings() {

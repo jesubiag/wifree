@@ -1,0 +1,113 @@
+@import org.pac4j.core.profile.CommonProfile
+@import java.util.{List => JList}
+@import controllers.admin.SurveyForm
+
+@(profile: CommonProfile, surveyForm: Form[Survey])
+
+@username = @{profile.getAttribute("realName").toString()}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    @parts.head("WiFree")
+    @parts.js.surveys_js()
+</head>
+
+<body class="nav-md">
+<div class="container body">
+
+    <div class="main_container">
+
+        <div class="col-md-3 left_col">
+            <div class="left_col scroll-view">
+
+                @parts.menu_site_title()
+
+                @parts.menu_profile_quickinfo(username)
+
+                <br />
+
+                @parts.sidebar_menu()
+                @parts.menu_footer_buttons()
+
+            </div>
+        </div>
+
+        @parts.top_navigation(username)
+
+        <!-- Page content -->
+        <div class="right_col" role="main">
+            <div class="row">
+                <div class="col-md-12 col-sm-6 col-xs-12">
+                    <h1>Create Survey</h1>
+
+                    <div>
+                        @helper.form(controllers.admin.routes.SurveysController.createSurvey(), 'id -> "surveyForm", Symbol("data-parsley-validate") -> "true", 'class -> "form-horizontal form-label-left") {
+                        <div class="form-group row survey-body">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                @helper.inputText(surveyForm("title"), '_label -> Messages("surveys.label.title"), 'type -> "text", 'required -> "required", 'class -> "form-control col-md-7 col-xs-12")
+                            </div>
+                        </div>
+
+                        <button type="button" id="newInputButton" class="btn btn-primary">New Input</button>
+                        <button type="button" id="newTextInputButton" class="btn btn-primary">@Messages("surveys.new-field.text")</button>
+                        <button type="button" id="newRatingInputButton" class="btn btn-primary">@Messages("surveys.new-field.rating")</button>
+                        <button type="button" id="newRadioInputButton" class="btn btn-primary">@Messages("surveys.new-field.radio")</button>
+                        <button type="button" id="newSelectorInputButton" class="btn btn-primary">@Messages("surveys.new-field.selector")</button>
+                        <button type="button" id="newCheckboxInputButton" class="btn btn-primary">@Messages("surveys.new-field.checkbox")</button>
+
+                        <div>
+                        @helper.repeat(surveyForm("fields"), min = 1) { field =>
+                            <div class="form-group row survey-fields-set" hidden>
+
+                                <span>
+                                    <h3>Pregunta 0</h3>
+                                    <button type="button" class="btn btn-danger delete-button" onclick="deleteSection(this)">Borrar</button>
+                                </span>
+
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    @helper.inputText(field("type"), 'class -> "form-control col-md-7 col-xs-12 field-type")
+                                    @helper.inputText(field("config")("key"), 'class -> "form-control col-md-7 col-xs-12")
+                                    @helper.inputText(field("config")("label"), '_label -> Messages("surveys.label.label"), 'class -> "form-control col-md-7 col-xs-12")
+                                    @helper.inputText(field("config")("order"), '_label -> Messages("surveys.label.order"), 'class -> "form-control col-md-7 col-xs-12")
+                                    @helper.checkbox(field("config")("required"), '_label -> Messages("surveys.label.required"), 'class -> "form-control col-md-7 col-xs-12 question-text")
+                                    @helper.inputText(field("config")("value"), 'class -> "form-control col-md-7 col-xs-12 question-text")
+                                    @helper.inputText(field("config")("maximum"), '_label -> Messages("surveys.label.maximum"), 'class -> "form-control col-md-7 col-xs-12 question-rating")
+                                    
+                                    <div class="rating-options">
+                                        <div>
+                                            @helper.repeat(field("config")("otherOptions"), min = 1) { optionsField =>
+                                                <div class="rating-option">
+                                                    @helper.inputText(optionsField("index"), '_label -> Messages("surveys.label.option.index"), 'type -> "number", 'class -> "form-control col-md-7 col-xs-12 question-radio")
+                                                    @helper.inputText(optionsField("key"), '_label -> Messages("surveys.label.option.key"), 'class -> "form-control col-md-7 col-xs-12 question-radio")
+                                                </div>
+                                            }
+                                        </div>
+                                        <button type="button" class="btn btn-info" onclick="addRatingOption(this)">@Messages("surveys.add-option")</button>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        }
+                        </div>
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                <button type="submit" class="btn btn-success">@Messages("submit")</button>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    @parts.resources_body()
+
+</body>
+
+</html>

@@ -11,6 +11,16 @@ import java.util.stream.Stream;
  */
 public class StringHelper {
 
+	public static String toLogString(String... attributes) {
+		String logString;
+		try {
+			logString = StringHelper.toParagraph(attributes);
+		} catch (Exception ignored) {
+			logString = Arrays.toString(attributes);
+		}
+		return logString;
+	}
+
 	public static String toParagraph(String... lines) {
 		String paragraph = "";
 		if ( lines != null )

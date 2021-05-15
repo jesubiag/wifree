@@ -37,7 +37,7 @@ public abstract class WiFreeController extends Controller {
 
 	protected CommonProfile getCurrentProfile() {
 		final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
-		final ProfileManager<CommonProfile> profileManager = new ProfileManager(context);
+		final ProfileManager<CommonProfile> profileManager = new ProfileManager<>(context);
 		Optional<CommonProfile> currentProfile = profileManager.get(true);
 		return currentProfile.orElseThrow(() -> new NoProfileFoundException("No profile in current session logged in. There should be a profile in session at this point."));
 	}

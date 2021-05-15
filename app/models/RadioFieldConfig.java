@@ -2,6 +2,7 @@ package models;
 
 import java.util.List;
 
+//@Entity
 public class RadioFieldConfig extends FieldConfig {
     private List<Option> options;
 
@@ -10,11 +11,11 @@ public class RadioFieldConfig extends FieldConfig {
         this.options = options;
     }
 
-    public List<Option> getOptions() {
+    public List<Option> getOtherOptions() {
         return options;
     }
 
-    public void setOptions(List<Option> options) {
-        this.options = options;
+    public void setOtherOptions(List<Option> otherOptions) {
+        this.options = otherOptions;
     }
 }

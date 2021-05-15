@@ -1,6 +1,7 @@
 package core.databinders;
 
 import models.Admin;
+import models.FieldConfig;
 import models.Portal;
 import play.data.format.Formatters;
 import play.i18n.MessagesApi;
@@ -25,6 +26,7 @@ public class WiFreeFormattersProvider implements Provider<Formatters> {
 		
 		formatters.register(Portal.class, new PortalDataBinder());
 		formatters.register(Admin.class, new AdminDataBinder());
+		formatters.register(FieldConfig.class, new FieldConfigDataBinder());
 		
 		return formatters;
 	}

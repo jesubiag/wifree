@@ -24,7 +24,7 @@ public class Field extends BaseModel {
 
     @Override
     public String toLogString() {
-        return null;
+        return toLogString("id: " + id, "type: " + type, "config: " + config.toLogString());
     }
 
     public Survey getSurvey() {

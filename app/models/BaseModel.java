@@ -34,14 +34,7 @@ public abstract class BaseModel extends Model implements Serializable, WiFreeEnt
 	}
 
 	protected String toLogString(String... attributes) {
-		String logString = "";
-		try {
-			logString = StringHelper.toParagraph(attributes);
-		} catch (Exception e) {
-			// TODO
-		} finally {
-			return logString;
-		}
+		return StringHelper.toLogString(attributes);
 	}
 
 	public abstract String toLogString();

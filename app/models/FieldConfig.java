@@ -1,15 +1,58 @@
 package models;
 
-public abstract class FieldConfig {
+
+import utils.StringHelper;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class FieldConfig {
 
     protected String key;
     protected String label;
     protected Integer order;
 
+    // Textbox
+    @Nullable
+    private Boolean required;
+    @Nullable
+    private String value;
+
+    // Rating
+    @Nullable
+    private Integer maximum;
+
+    // Radio Selector Checkbox
+    @Nullable
+    private List<Option> otherOptions;
+
+    // TODO Checkbox
+    // TODO Selector
+
+
+    public FieldConfig(String key, String label, Integer order, @Nullable Boolean required, @Nullable String value, @Nullable Integer maximum, @Nullable List<Option> otherOptions) {
+        this.key = key;
+        this.label = label;
+        this.order = order;
+        this.required = required;
+        this.value = value;
+        this.maximum = maximum;
+        this.otherOptions = otherOptions;
+    }
+
+    public FieldConfig(){}
+
     protected FieldConfig(String key, String label, Integer order) {
         this.key = key;
         this.label = label;
         this.order = order;
+    }
+
+    public String toLogString() {
+        return StringHelper.toLogString("key: " + key, "label: " + label, "order: " + order, "required: " + required,
+                "value: " + value, "maximum: " + maximum,
+                "otherOptions: " + (otherOptions != null ? otherOptions.stream().map(Option::toLogString).collect(Collectors.joining()) : ""));
     }
 
     public String getKey() {
@@ -34,6 +77,44 @@ public abstract class FieldConfig {
 
     public void setOrder(Integer order) {
         this.order = order;
+    }
+
+    public Boolean getRequired() {
+        return required;
+    }
+
+    public void setRequired(Boolean required) {
+        this.required = required;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public Integer getMaximum() {
+        return maximum;
+    }
+
+    public void setMaximum(Integer maximum) {
+        this.maximum = maximum;
+    }
+
+    public List<Option> getOtherOptions() {
+        return otherOptions;
+    }
+
+    public void setOtherOptions(List<Option> otherOptions) {
+        this.otherOptions = otherOptions;
+    }
+
+    public static class FieldConfigTypes {
+        public static final String Textbox = "textbox";
+        public static final String Rating = "rating";
+        public static final String Radio = "radio";
     }
 
 }

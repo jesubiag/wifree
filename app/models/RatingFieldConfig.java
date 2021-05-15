@@ -1,5 +1,6 @@
 package models;
 
+
 public class RatingFieldConfig extends FieldConfig {
     private Integer maximum;
 

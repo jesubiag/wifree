@@ -40,9 +40,9 @@ public class SurveyController extends WiFreeController {
         survey.getFields().forEach(field -> field.setSurvey(survey));
 
         // TODO guardar survey, crear dao
-        CreateSurveyResponse createSurveyResponse = surveysService.createSurvey(new CreateSurveyRequest(survey));
+        CreateSurveyResponse createSurveyResponse = surveysService.createSurvey(new CreateSurveyRequest(survey, 0));
 
-        return ok(createSurveyResponse.isOk() + "");
+        return ok(createSurveyResponse.isOk() + survey.getTitle());
     }
 
     private void createField(List<Field> fields, JsonNode field) {
@@ -98,8 +98,9 @@ public class SurveyController extends WiFreeController {
     }
 
     private void createOption(List<Option> options, JsonNode optionsNode) {
+        Integer optionIndex = optionsNode.findValue("index").asInt();
         String optionKey = optionsNode.findValue("key").asText();
-        options.add(new Option(optionKey));
+        options.add(new Option(optionIndex, optionKey));
     }
 
 }

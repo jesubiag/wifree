@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Survey extends BaseModel {
@@ -29,7 +30,8 @@ public class Survey extends BaseModel {
 
     @Override
     public String toLogString() {
-        return null;
+        return toLogString("id: " + id, "portalId: " + portal.getId(), "title: " + title, "enabled: " + enabled,
+                "fields: " + fields.stream().map(Field::toLogString).collect(Collectors.joining()));
     }
 
     public List<Field> getFields() {

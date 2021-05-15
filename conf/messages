@@ -3,6 +3,7 @@ submit=Guardar
 
 menu.sidebar.dashboard=Dashboard
 menu.sidebar.connections=Conexiones
+menu.sidebar.surveys=Encuestas
 menu.sidebar.portal-settings=Configuración del Portal
 menu.sidebar.portal-settings.applications=Aplicaciones
 menu.sidebar.portal-settings.login=Login
@@ -16,3 +17,17 @@ connections.title.connected-users=Usuarios en línea
 connections.users-table.header.user-name=Nombre de usuario
 connections.users-table.header.connection-start=Inicio de conexión
 connections.users-table.header.user-device=Dispositivo
+
+surveys.label.title=Título de la encuesta
+surveys.new-field.text=Nuevo campo de texto
+surveys.new-field.rating=Nuevo campo de puntuación
+surveys.new-field.radio=Nuevo campo de opción única
+surveys.new-field.selector=Nuevo campo de selecciones
+surveys.new-field.checkbox=Nuevo campo de opciones múltiples
+surveys.add-option=Agregar opción
+surveys.label.label=Título de la pregunta
+surveys.label.order=Número de pregunta
+surveys.label.required=¿Es obligatorio?
+surveys.label.maximum=Cantidad de opciones
+surveys.label.option.index=Número de opción
+surveys.label.option.key=Valor de la opción
