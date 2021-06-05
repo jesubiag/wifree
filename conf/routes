@@ -9,6 +9,7 @@ GET         /testTheme                              controllers.ApplicationContr
 GET         /admin                                  controllers.LoginController.index
 GET         /dashboard                              controllers.AdminAppController.dashboard
 GET         /surveys                                controllers.AdminAppController.surveys
+GET         /all-surveys                            controllers.AdminAppController.allSurveys
 GET         /analytics                              controllers.AdminAppController.analytics
 GET         /connections                            controllers.AdminAppController.connections
 GET			/portal-settings						controllers.AdminAppController.portalSettings

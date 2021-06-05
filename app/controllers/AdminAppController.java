@@ -214,6 +214,12 @@ public class AdminAppController extends WiFreeController {
 		return ok(views.html.admin.surveys.render(currentProfile, form));
 	}
 
+	@SubjectPresent(handlerKey = "FormClient", forceBeforeAuthCheck = true)
+	public Result allSurveys() throws NoProfileFoundException {
+		CommonProfile currentProfile = getCurrentProfile();
+		return ok(views.html.admin.all_surveys.render(currentProfile));
+	}
+
 	public Result portalSettings() {
 		return notFound();
 	}
