@@ -22,6 +22,7 @@ import views.dto.SurveySummary;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -139,7 +140,10 @@ public class AdminAppController extends WiFreeController {
 	public Result allSurveys() throws NoProfileFoundException {
 		CommonProfile currentProfile = getCurrentProfile();
 		GetAllSurveysResponse getAllSurveysResponse = surveysService.getAllSurveys(new GetAllSurveysRequest(portalId()));
-		List<SurveySummary> summaries = getAllSurveysResponse.surveys().stream().map(this::toSummary).collect(Collectors.toList());
+		List<SurveySummary> summaries = getAllSurveysResponse.surveys().stream()
+				.map(this::toSummary)
+				.sorted(Comparator.comparing(SurveySummary::creation).reversed())
+				.collect(Collectors.toList());
 		return ok(views.html.admin.all_surveys.render(currentProfile, summaries));
 	}
 

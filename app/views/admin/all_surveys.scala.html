@@ -2,7 +2,7 @@
 @import java.util.{List => JList}
 @import views.dto.SurveySummary
 
-@(profile: CommonProfile, surveys: JList[SurveySummary])
+@(profile: CommonProfile, summaries: JList[SurveySummary])
 
 @username = @{profile.getAttribute("realName").toString()}
 
@@ -11,7 +11,19 @@
 
 <head>
     @parts.head("WiFree")
-    @parts.js.surveys_js()
+
+    <script>
+        $(document).ready(function() {
+            $(".clickable-row").click(function() {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+    <style>
+        .clickable-row {
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body class="nav-md">
@@ -39,16 +51,37 @@
         <!-- Page content -->
         <div class="right_col" role="main">
             <div class="row">
-                <div class="col-md-12 col-sm-6 col-xs-12">
-                    <h1>All Surveys</h1>
-                    @surveys.map {summary =>
-                        <h3>@summary.title</h3>
-                        <h2>@summary.id</h2>
-                        <h2>@summary.creation</h2>
-                    }
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Encuestas (TODO)</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <table id="surveystable" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Titulo (TODO)</th>
+                                        <th>Fecha de creación (TODO)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @summaries.map { summary =>
+                                    <tr class="clickable-row" data-href="http://google.com">
+                                        <td class="a-center">@summary.id</td>
+                                        <td>@summary.title</td>
+                                        <td>@summary.creation</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+            </div>
         </div>
-
+        
     </div>
 
     @parts.resources_body()
