@@ -3,11 +3,9 @@ package controllers;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 import models.PortalNetworkConfiguration;
 import models.Survey;
+import operations.requests.GetAllSurveysRequest;
 import operations.requests.GetAnalyticsDataRequest;
-import operations.responses.GetAnalyticsDataResponse;
-import operations.responses.VisitsByDayByTimeRange;
-import operations.responses.VisitsByPeriod;
-import operations.responses.VisitsByPeriodByGender;
+import operations.responses.*;
 import org.pac4j.core.profile.CommonProfile;
 import play.api.libs.json.JsValue;
 import play.data.Form;
@@ -15,15 +13,19 @@ import play.mvc.Result;
 import scala.Tuple2;
 import services.AnalyticsService;
 import services.ConnectionsService;
+import services.SurveysService;
 import services.core.MinutesRange;
 import utils.DateHelper;
 import utils.JsonHelper;
 import views.dto.ConnectedUser;
+import views.dto.SurveySummary;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by jesu on 27/06/17.
@@ -32,6 +34,9 @@ public class AdminAppController extends WiFreeController {
 
 	@Inject
 	AnalyticsService analyticsService;
+
+	@Inject
+	SurveysService surveysService;
 
 	@Inject
 	ConnectionsService connectionsService;
@@ -133,7 +138,13 @@ public class AdminAppController extends WiFreeController {
 	@SubjectPresent(handlerKey = "FormClient", forceBeforeAuthCheck = true)
 	public Result allSurveys() throws NoProfileFoundException {
 		CommonProfile currentProfile = getCurrentProfile();
-		return ok(views.html.admin.all_surveys.render(currentProfile));
+		GetAllSurveysResponse getAllSurveysResponse = surveysService.getAllSurveys(new GetAllSurveysRequest(portalId()));
+		List<SurveySummary> summaries = getAllSurveysResponse.surveys().stream().map(this::toSummary).collect(Collectors.toList());
+		return ok(views.html.admin.all_surveys.render(currentProfile, summaries));
+	}
+
+	private SurveySummary toSummary(Survey survey) {
+		return new SurveySummary(survey.getId(), survey.getTitle(), survey.getWhenCreated());
 	}
 
 	public Result portalSettings() {
