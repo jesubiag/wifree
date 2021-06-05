@@ -1,6 +1,7 @@
 package controllers;
 
 import be.objectify.deadbolt.java.actions.SubjectPresent;
+import daos.SurveyDAO;
 import models.PortalNetworkConfiguration;
 import models.Survey;
 import operations.requests.GetAllSurveysRequest;
@@ -133,6 +134,14 @@ public class AdminAppController extends WiFreeController {
 	public Result surveys() throws NoProfileFoundException {
 		CommonProfile currentProfile = getCurrentProfile();
 		Form<Survey> form = formFactory.form(Survey.class);
+		return ok(views.html.admin.surveys.render(currentProfile, form));
+	}
+
+	@SubjectPresent(handlerKey = "FormClient", forceBeforeAuthCheck = true)
+	public Result survey(Long surveyId) throws NoProfileFoundException {
+		CommonProfile currentProfile = getCurrentProfile();
+		Survey survey = new SurveyDAO().get(surveyId);
+		Form<Survey> form = formFactory.form(Survey.class).fill(survey);
 		return ok(views.html.admin.surveys.render(currentProfile, form));
 	}
 

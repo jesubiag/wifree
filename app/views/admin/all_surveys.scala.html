@@ -68,7 +68,7 @@
                                 </thead>
                                 <tbody>
                                 @summaries.map { summary =>
-                                    <tr class="clickable-row" data-href="http://google.com">
+                                    <tr class="clickable-row" data-href="@routes.AdminAppController.survey(summary.id)">
                                         <td class="a-center">@summary.id</td>
                                         <td>@summary.title</td>
                                         <td>@summary.creation</td>
